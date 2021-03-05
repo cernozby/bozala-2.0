@@ -1,0 +1,58 @@
+{form registrationForm}
+  <div class="modal fade" id="registrationModalCentre" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Registrace</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="row col-md-12 d-flex">
+            <div class="col-md-4 form-group pt-2 font-weight-bold"><p>{label first_name /}</p></div>
+            <div class="col-md-8 form-group pb-3">{input first_name class => 'form-control'}</div>
+            <div class="col-md-4 form-group pt-2 font-weight-bold">{label last_name /}</div>
+            <div class="col-md-8 form-group pb-3">{input last_name class => 'form-control'}</div>
+            <div class="col-md-4 form-group pt-2 font-weight-bold">{label email /}</div>
+            <div class="col-md-8 form-group pb-3">{input email class => 'form-control'}</div>
+            <div class="col-md-4 form-group pt-2 font-weight-bold">{label passwd /}</div>
+            <div class="col-md-8 form-group pb-3">{input passwd class => 'form-control form-login-passwd'}</div>
+            <div class="col-md-4 form-group pt-2 font-weight-bold">{label passwd_verify /}</div>
+            <div class="col-md-8 form-group pb-3">{input passwd_verify class => 'form-control form-login-passwd-verify'}</div>
+            <div class="col-md-12 form-check pb-3 ">
+              <input name="show_passwd" class="form-check-input" type="checkbox" value="" id="showPasswd">
+              <label class="form-check-label" for="flexCheck">
+                Zobrazit heslo
+              </label>
+            </div>
+            <div class="col-md-12 form-check pb-3 ">
+              <input n:name="agree_with_terms" class="form-check-input" type="checkbox"  id="flexCheck">
+              <label class="form-check-label" for="flexCheck">
+                {$form['agree_with_terms']->caption}
+              </label>
+            </div>
+            <div class="col-md-12 pb-3 ">
+              {input submit class=>"btn btn-primary btn-block col-md-12"}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{/form}
+
+<script>
+    $(document).ready(function () {
+        $('#registrationModalCentre').modal('show');
+        $(document).on('change', '#showPasswd', function () {
+            if ($(this).prop('checked')) {
+                $(".form-login-passwd").attr('type', 'text');
+                $(".form-login-passwd-verify").attr('type', 'text');
+            } else {
+                $(".form-login-passwd").attr('type', 'password');
+                $(".form-login-passwd-verify").attr('type', 'password');
+            }
+        });
+    });
+</script>
