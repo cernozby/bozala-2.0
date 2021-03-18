@@ -1,0 +1,24 @@
+{block content}
+  <table class="table">
+    <tr>
+      <th>Jméno</th>
+      <th>Oddil</th>
+      <th>Rok narození</th>
+      <th>Akce</th>
+    </tr>
+      {foreach $competitors as $item}
+    <tr>
+        <td>{$item->getFullName()}</td>
+        <td>{$item->get('club')}</td>
+        <td>{$item->get('year')}</td>
+        <td>
+          <button class="btn btn-primary show-form-competitor" data-id="{$item->getId()}">Editovat</button>
+          <a n:href="deleteItem! 'id' => $item->getId(), 'type' => 'Competitor'" class="btn btn-primary">Smazat</a>
+          <a n:href=":Sys:Homepage:prereg 'competitorId' => $item->getId()" class="btn btn-primary">Predregistrovat</a>
+        </td>
+    </tr>
+        {control formNewCompetitorControl $item->getId()}
+      {/foreach}
+  </table>
+{/block}
+

@@ -11,9 +11,19 @@ Class HomepagePresenter extends BasePresenter
       $this->flashMessage('Nedostatečná oprávnění');
       $this->redirect(':Public:Homepage:default');
     }
-    
     parent::startup();
-    bdump($this->user);
+  }
+  
+  public function renderListOfComps() : void {
+    $this->template->comps =  $this->compModel->getAllAsObj();
+  }
+  
+  public function renderPrereg($competitorId) : void {
+  
+  }
+  
+  public function renderListOfCompetitors() : void {
+    $this->template->competitors = $this->competitorModel->getByUser($this->userClass->getId());
   }
   
   public function handleLogout() : void {

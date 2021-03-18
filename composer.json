@@ -5,7 +5,7 @@
 	"type": "project",
 	"license": ["MIT", "BSD-3-Clause", "GPL-2.0", "GPL-3.0"],
 	"require": {
-		"php": ">= 7.2",
+		"php": ">=7.4",
 		"nette/application": "^3.1",
 		"nette/bootstrap": "^3.1",
 		"nette/caching": "^3.1",
@@ -22,7 +22,8 @@
 		"tracy/tracy": "^2.8",
 		"php-kit/ext-pdo": "^1.1",
 		"ext-pdo": "*",
-		"twbs/bootstrap": "4.6.0"
+		"twbs/bootstrap": "4.6.0",
+		"cernozby/zkzk": "dev-master"
 	},
 	"require-dev": {
 		"roave/security-advisories": "dev-master"
@@ -35,5 +36,5 @@
 			"App\\": "app"
 		}
 	},
-	"minimum-stability": "stable"
+	"minimum-stability": "dev"
 }

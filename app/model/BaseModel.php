@@ -79,7 +79,7 @@ class BaseModel {
   public function arrayToObject(array $array) : array {
     $objects = array();
     foreach ($array as $a) {
-      $instance = $this->container->createInstance(get_class($this));
+      $instance = $this->container->createInstance(str_replace('Model', '', get_class($this)));
       $objects[] = $instance->initData($a);
     }
     return $objects;
@@ -103,9 +103,9 @@ class BaseModel {
   }
   
   /**
-   * @return array|null
+   * @return array
    */
-  public function getAll() :? array {
+  public function getAll() : array {
     return $this->getTable()->select('*')->fetchAll();
   }
   
@@ -134,5 +134,14 @@ class BaseModel {
     return $this->db->table($this->table)->where($column.' = ?', $value)->fetch() ? true : false;
   }
   
+  public function getAllOrder($column) : array {
+    return $this->getTable()->select('*')->order($column)->fetchAll();
+  }
   
+  public function getAllAsObj(string $orderColumn = '') : array {
+    if ($orderColumn) {
+      return $this->arrayToObject($this->getAllOrder($orderColumn));
+    }
+    return $this->arrayToObject($this->getAll());
+  }
 }

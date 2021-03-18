@@ -4,8 +4,50 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3fffe2d915c49ad9f6225a31a70de32c",
+    "content-hash": "1e8d3d3c54942ba5b1f56ed117ddbb02",
     "packages": [
+        {
+            "name": "cernozby/zkzk",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/cernozby/zk_zk.git",
+                "reference": "2c68300a7e0d7ed578a277ee2a96b854524e2679"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/cernozby/zk_zk/zipball/2c68300a7e0d7ed578a277ee2a96b854524e2679",
+                "reference": "2c68300a7e0d7ed578a277ee2a96b854524e2679",
+                "shasum": ""
+            },
+            "default-branch": true,
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jordi Boggiano",
+                    "email": "j.boggiano@seld.be",
+                    "homepage": "http://seld.be",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Your package description goes here",
+            "homepage": "https://yourcompany.com",
+            "keywords": [
+                "go",
+                "here",
+                "relevant",
+                "tags"
+            ],
+            "support": {
+                "issues": "https://github.com/cernozby/zk_zk/issues",
+                "source": "https://github.com/cernozby/zk_zk/tree/master"
+            },
+            "time": "2021-03-05T15:36:11+00:00"
+        },
         {
             "name": "latte/latte",
             "version": "v2.10.3",
@@ -1877,8 +1919,9 @@
         }
     ],
     "aliases": [],
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "stability-flags": {
+        "cernozby/zkzk": 20,
         "roave/security-advisories": 20
     },
     "prefer-stable": false,
@@ -1888,5 +1931,5 @@
         "ext-pdo": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "1.1.0"
+    "plugin-api-version": "2.0.0"
 }

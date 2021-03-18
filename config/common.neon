@@ -21,6 +21,23 @@ services:
 	    class: App\model\UserModel
 	userClass:
 	    class: App\model\userClass
+	competitor:
+	    class: App\model\Competitor
+	competitorModel:
+	    class: App\model\CompetitorModel
+	comp:
+	    class: App\model\Comp
+	compModel:
+	    class: App\model\CompModel
+	category:
+	    class: App\model\Category
+	categoryModel:
+	    class: App\model\CategoryModel
+	compcat:
+	    class: App\model\Compcat
+	compcatModel:
+	    class: App\model\CompcatModel
+
 search:
     model:
         in: %appDir%\model

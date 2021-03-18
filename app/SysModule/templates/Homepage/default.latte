@@ -1,35 +1,19 @@
 {block content}
-  <h2>prihlaseni</h2>
-  <h2>prihlaseni</h2>
-  <h2>prihlaseni</h2>
-  <h2>prihlaseni</h2>
-  <h2>prihlaseni</h2>
-  <h2>prihlaseni</h2>
-  <h2>prihlaseni</h2>
-  <h2>prihlaseni</h2>
-  <h2>prihlaseni</h2>
-  <h2>prihlaseni</h2>
-  <h2>prihlaseni</h2>
-  <h2>prihlaseni</h2>
-  <h2>prihlaseni</h2>
-  <h2>prihlaseni</h2>
-  <h2>prihlaseni</h2>
-  <h2>prihlaseni</h2>
-  <h2>prihlaseni</h2>
-  <h2>prihlaseni</h2>
-  <h2>prihlaseni</h2>
-  <h2>prihlaseni</h2>
-  <h2>prihlaseni</h2>
-  <h2>prihlaseni</h2>
-  <h2>prihlaseni</h2>
-  <h2>prihlaseni</h2>
-  <h2>prihlaseni</h2>
-  <h2>prihlaseni</h2>
-  <h2>prihlaseni</h2>
-  <h2>prihlaseni</h2>
-  <h2>prihlaseni</h2>
-  <h2>prihlaseni</h2>
-  <h2>prihlaseni</h2>
+  <a class="btn icon-btn btn-success font-button-admin text-center show-form-competitor" href="#">
+    <i class="fa fa-plus-circle fa-4x round"></i>&nbsp; <p>Nový závodník</p>
+  </a>
+
+  <a class="btn icon-btn btn-success font-button-admin text-center show-form-comp" href="#">
+    <i class="fa fa-plus-circle fa-4x round"></i>&nbsp; <p>Nový závod</p>
+  </a>
+
+  <a class="btn icon-btn btn-success font-button-admin text-center" n:href=":Sys:Homepage:listOfComps">
+    <i class="fa fa-plus-circle fa-4x round"></i>&nbsp; <p>Seznam závodů</p>
+  </a>
+
+  <a class="btn icon-btn btn-success font-button-admin text-center" n:href=":Sys:Homepage:listOfCompetitors">
+    <i class="fa fa-plus-circle fa-4x round"></i>&nbsp; <p> {if $userClass->isAdmin()}Moji závodníci{else}Seznam závodníků{/if}</p>
+  </a>
 {/block}
 
 

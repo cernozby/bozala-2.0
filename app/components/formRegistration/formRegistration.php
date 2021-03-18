@@ -46,6 +46,7 @@ class formRegistration extends BaseComponent {
   /**
    * @param Form $form
    * @param ArrayHash $values
+   * @throws AbortException
    */
   public function registrationFormSucceed(Form $form, ArrayHash $values): void {
     try {
@@ -54,5 +55,6 @@ class formRegistration extends BaseComponent {
     } catch (\Exception $e) {
       $this->presenter->flashMessage('Neúspešná registrace');
     }
+    $this->presenter->redirect('this');
   }
 }

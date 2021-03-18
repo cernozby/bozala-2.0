@@ -1,0 +1,90 @@
+{form newCompForm}
+  <div class="modal fade" id="newCompModalCentre{if $compId}-{$compId}{/if}" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Nový Závod</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          {var $classBoulder = ''}
+          {var $classSpeed = ''}
+          {var $classLead = ''}
+          {if !$form->values->offsetGet('boulder') > 0} {var $classBoulder = 'form-hide'}{/if}
+          {if !$form->values->offsetGet('speed') > 0} {var $classSpeed = 'form-hide'}{/if}
+          {if !$form->values->offsetGet('lead') > 0} {var $classLead = 'form-hide'}{/if}
+
+          <div class="row col-md-12 d-flex">
+            <div class="col-md-4 form-group pt-2 font-weight-bold"><p>{label name /}</p></div>
+            <div class="col-md-8 form-group pb-3">{input name class => 'form-control'}</div>
+            <div class="col-md-4 form-group pt-2 font-weight-bold"><p>{label date /}</p></div>
+            <div class="col-md-8 form-group pb-3">{input date class => 'form-control'}</div>
+
+            <div class="col-md-4 form-group pt-2 font-weight-bold">{label boulder /}</div>
+            <div class="col-md-8 form-group pb-3">{input boulder class => 'form-control'}</div>
+
+            <div class="{$classBoulder} boulder_final col-md-4 form-group pt-2 font-weight-bold">{label boulder_final /}</div>
+            <div class="{$classBoulder} boulder_final col-md-8 form-group pb-3">{input boulder_final class => 'form-control'}</div>
+            <div class="{$classBoulder} boulder_result col-md-4 form-group pt-2 font-weight-bold">{label boulder_result /}</div>
+            <div class="{$classBoulder} boulder_result col-md-8 form-group pb-3">{input boulder_result class => 'form-control'}</div>
+
+            <div class="col-md-4 form-group pt-2 font-weight-bold">{label lead /}</div>
+            <div class="col-md-8 form-group pb-3">{input lead class => 'form-control'}</div>
+            <div class="{$classLead} lead_final col-md-4 form-group pt-2 font-weight-bold">{label lead_final /}</div>
+            <div class="{$classLead} lead_final col-md-8 form-group pb-3">{input lead_final class => 'form-control'}</div>
+            <div class="{$classLead} lead_result col-md-4 form-group pt-2 font-weight-bold">{label lead_result /}</div>
+            <div class="{$classLead} lead_result col-md-8 form-group pb-3">{input lead_result class => 'form-control'}</div>
+
+            <div class="col-md-4 form-group pt-2 font-weight-bold">{label speed /}</div>
+            <div class="col-md-8 form-group pb-3">{input speed class => 'form-control'}</div>
+            <div class="{$classSpeed} speed_final col-md-4 form-group pt-2 font-weight-bold">{label speed_final /}</div>
+            <div class="{$classSpeed} speed_final col-md-8 form-group pb-3">{input speed_final class => 'form-control'}</div>
+            <div class="{$classSpeed} speed_result col-md-4 form-group pt-2 font-weight-bold">{label speed_result /}</div>
+            <div class="{$classSpeed} speed_result col-md-8 form-group pb-3">{input speed_result class => 'form-control'}</div>
+
+            <div class="col-md-12 pb-3 ">
+              {input submit class=>"btn btn-primary btn-block col-md-12"}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{/form}
+
+<script>
+    $(document).ready(function () {
+        $("#frm-formNewCompControl-newCompForm-boulder").on("change", function () {
+          if ($(this).val() !== '') {
+              $(".boulder_final").show("slow");
+              $(".boulder_result").show("slow");
+          } else {
+              $(".boulder_final").hide("slow");
+              $(".boulder_result").hide("slow");
+          }
+        });
+
+        $("#frm-formNewCompControl-newCompForm-speed").on("change", function () {
+            if ($(this).val() !== '') {
+                $(".speed_final").show("slow");
+                $(".speed_result").show("slow");
+            } else {
+                $(".speed_final").hide("slow");
+                $(".speed_result").hide("slow");
+            }
+        });
+
+        $("#frm-formNewCompControl-newCompForm-lead").on("change", function () {
+            if ($(this).val() !== '') {
+                $(".lead_final").show("slow");
+                $(".lead_result").show("slow");
+            } else {
+                $(".lead_final").hide("slow");
+                $(".lead_result").hide("slow");
+            }
+        });
+    });
+
+</script>

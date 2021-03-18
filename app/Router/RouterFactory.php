@@ -16,7 +16,10 @@ final class RouterFactory
 	{
 		$router = new RouteList;
 		$router->withModule('Sys')
-               ->addRoute('administrace', 'Homepage:default');
+               ->addRoute('administrace', 'Homepage:default')
+               ->addRoute('seznam-zavodu', 'Homepage:listOfComps')
+               ->addRoute('zavodnici', 'Homepage:listOfCompetitors')
+               ->addRoute('predregistrace[/<competitorId>]', 'Homepage:prereg');
         $router->withModule('Public')
                ->addRoute('registrace', 'Registration:registration')
                ->addRoute('prihlaseni', 'Registration:login')
