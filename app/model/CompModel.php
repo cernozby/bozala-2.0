@@ -25,9 +25,23 @@ class CompModel extends BaseModel
     $this->table = 'comp';
     parent::__construct($database, $container, $linkGenerator);
   }
-  
+
+    /**
+     * @return Comp[]
+     */
   public function getOpenComps() : array {
     return $this->arrayToObject($this->getTable()->select('*')->where('online_registration = ?', 1)->fetchAll());
+  }
+
+  /**
+  * @return Comp[]
+  */
+  public function getEditableResultComps() : array {
+      return $this->arrayToObject($this->getTable()->select('*')->where('editable_result = ?', 1)->fetchAll());
+  }
+
+  public function getVisiblePreregComp() : array {
+      return $this->arrayToObject($this->getTable()->select('*')->where('visible_prereg = ?', 1)->fetchAll());
   }
   
   public function newComp(ArrayHash $data) : void {

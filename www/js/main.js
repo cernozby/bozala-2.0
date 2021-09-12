@@ -1,6 +1,6 @@
 $(document).ready(function () {
     //form-competitor show
-    $('.show-form-competitor').on('click', function () {
+    $(document).on('click', '.show-form-competitor', function () {
         if ($(this).data("id")) {
             $('#newCompetitorModalCentre-' + $(this).data("id")).modal('show');
         } else {
@@ -9,7 +9,7 @@ $(document).ready(function () {
     })
 
     //form-comp show
-    $('.show-form-comp').on('click', function () {
+    $(document).on('click', '.show-form-comp', function () {
         if ($(this).data("id")) {
             $('#newCompModalCentre-' + $(this).data("id")).modal('show');
         } else {
@@ -18,24 +18,32 @@ $(document).ready(function () {
     })
 
     //form-category-form
-    $('.show-form-category').on('click', function () {
-        console.log($(this).data("id-category"));
+    $(document).on('click', '.show-form-category', function () {
         if ($(this).data("id-category") !== undefined) {
-            $('#newCategoryModalCentre-' + $(this).data("id") + '-' + $(this).data("id-category") ).modal('show');
+            $('#newCategoryModalCentre-' + $(this).data("id") + '-' + $(this).data("id-category")).modal('show');
         } else {
+            console.log($(this).data("id"));
             $('#newCategoryModalCentre-' + $(this).data("id")).modal('show');
         }
     });
 
-    //show category
-    $('.show-category').on('click', function () {
+    $(document).on('click', '.show-category', function () {
         $('#category-list-' + $(this).data("id")).toggle('slow');
     });
 
-    //timeout for flashMessage
-    setTimeout(function() {
-        $('#myAlert').hide('slow');
-    }, 2000);
+    $(document).on('click', '#changeAdminPart', function () {
+        let adminPart = $('.admin-part');
+        if(adminPart.attr('style')) {
+            adminPart.removeAttr("style");
+            $('.get-green').addClass("bg-success");
+            $('.get-red').addClass("bg-danger");
+        } else {
+            $('.get-green').removeClass("bg-success");
+            adminPart.css({"display": "none"});
+
+        }
+    });
+
 });
 
 

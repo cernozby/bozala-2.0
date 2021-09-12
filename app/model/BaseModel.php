@@ -3,6 +3,7 @@ namespace App\model;
 
 use Nette\Application\LinkGenerator;
 use Nette\Database\Explorer;
+use Nette\Database\Table\ActiveRow;
 use Nette\Database\Table\Selection;
 use Nette\DI\Container;
 
@@ -78,9 +79,10 @@ class BaseModel {
    */
   public function arrayToObject(array $array) : array {
     $objects = array();
+
     foreach ($array as $a) {
       $instance = $this->container->createInstance(str_replace('Model', '', get_class($this)));
-      $objects[] = $instance->initData($a);
+      $objects[$a->getPrimary()] = $instance->initData($a);
     }
     return $objects;
   }

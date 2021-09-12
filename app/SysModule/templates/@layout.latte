@@ -15,13 +15,23 @@
 </head>
 
 <body>
-		<div n:foreach="$flashes as $flash" id="myAlert">
-			{if $flash}
-				<div id="myAlert" class="alert alert-{$flash->type} flash-message" role="alert" >
-					{$flash->message}
-				</div>
-			{/if}
-		</div>
+	<div id="flash-message">
+		{snippet flashmessage}
+			<div n:foreach="$flashes as $flash" id="myAlert">
+				{if $flash}
+					<div id="myAlert" class="alert alert-{$flash->type} flash-message" role="alert" >
+						{$flash->message}
+					</div>
+				{/if}
+			</div>
+			<script>
+				setTimeout(function () {
+					$('#myAlert').hide('slow');
+				}, 4000);
+			</script>
+		{/snippet}
+	</div>
+
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
@@ -38,7 +48,7 @@
 				<a class="nav-link text-white" href="#">Link</a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link text-white" href="#">Disabled</a>
+				<a class="nav-link text-white" n:href=":Sys:Homepage:listOfPrereg">Předregistrace</a>
 			</li>
 		</ul>
 		<div class="d-flex">

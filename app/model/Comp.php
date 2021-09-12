@@ -23,10 +23,7 @@ class Comp extends BaseFactory
     $this->table = 'comp';
     parent::__construct($database, $container, $linkGenerator);
   }
-  
-  /**
-   * @return string
-   */
+
   public function isLeadComp() : bool {
     return $this->get('lead') > 0;
   }
@@ -38,19 +35,20 @@ class Comp extends BaseFactory
   public function isSpeedComp() : bool {
     return $this->get('speed') > 0;
   }
-  
+
+    /**
+     *
+     * @return Category[]
+     */
   public function getCategory() : array {
     return $this->container->createService('categoryModel')->getByCompId($this->getId());
   }
-  
-  
-/*  public function getAllCategory() : array {
-    $result = [];
-    $compCat = $this->container->createService('compcatModel')->getByComp($this->getId());
-    foreach ($compCat as $item) {
-      $result[] = $this->container->createService('category')->initId($item->get('category_id'));
-    }
-    
-    return $result;
-  }*/
+
+  public function getCompName() : string {
+      return $this->get('name');
+  }
+
+  public function getDate() {
+      return $this->get('date');
+  }
 }

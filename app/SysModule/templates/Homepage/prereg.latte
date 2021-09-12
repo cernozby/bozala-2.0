@@ -1,3 +1,25 @@
-{block content}
-<h2>adasdasdad</h2>
-{/block}
+{varType App\model\Category[] $categories}
+{varType App\model\Competitor $competitor}
+    {block content}
+
+        <a n:href=":Sys:Homepage:listOfCompetitors" class="btn btn-primary pull-right">Zpět</a>
+        <table class="table" n:snippet="prereg">
+            <tr>
+                <th>Jméno závodu</th>
+                <th>Datum</th>
+                <th>kategorie</th>
+                <th>Akce</th>
+            </tr>
+            {foreach $categories as $category}
+                {var $comp = $category->getComp()}
+                <tr class="{if $competitor->isPrereg($category->getId())} bg-success {else} bg-danger {/if}">
+                    <td>{$comp->getCompName()}</td>
+                    <td>{$comp->getDate()}</td>
+                    <td>{$category->getCategoryName()}</td>
+                    <td>
+                        <a n:href="prereg! 'categoryId' => $category->getId(), 'competitorId' => $competitor->getId()" class="btn btn-primary ajax">Předregistrovat</a>
+                    </td>
+                </tr>
+            {/foreach}
+        </table>
+    {/block}

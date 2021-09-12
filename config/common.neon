@@ -37,6 +37,10 @@ services:
 	    class: App\model\Compcat
 	compcatModel:
 	    class: App\model\CompcatModel
+	prereg:
+	    class: App\model\Prereg
+	preregModel:
+	    class: App\model\PreregModel
 
 search:
     model:

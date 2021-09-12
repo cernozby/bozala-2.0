@@ -1,5 +1,7 @@
 {block content}
+  {varType App\model\Comp[] $comps}
   {if $comps}
+    {snippet comp}
     {foreach $comps as $comp}
       <div class="card mt-5 mb-5">
         <div style="padding: 15px">
@@ -9,6 +11,7 @@
               <th>Datum</th>
               <th>Online Registrace</th>
               <th>Otevřené výsledky</th>
+              <th>Viditelná předregistrace</th>
               {if $comp->isLeadComp()}
                 <th>Počet cest</th>
                 <th>Systém výsledků</th>
@@ -29,7 +32,8 @@
               <td>{$comp->get('name')}</td>
               <td>{$comp->get('date')|date:'%e. %m. %Y'}</td>
               <td>{$comp->get('online_registration')|boolToWorld}</td>
-              <td>{$comp->get('open_result')|boolToWorld}</td>
+              <td>{$comp->get('visible_result')|boolToWorld}</td>
+              <td>{$comp->get('visible_prereg')|boolToWorld}</td>
               {if $comp->isLeadComp()}
                 <td>{$comp->get('lead')}</td>
                 <td>{$comp->get('lead_result')|resultType}</td>
@@ -51,6 +55,11 @@
             <button class="btn btn-primary show-category" data-id="{$comp->getId()}">Kategorie</button>
             <a n:href="DeleteItem! id => $comp->getId(), type => 'Comp' " class="btn btn-primary">Smazat</a>
             <button data-id="{$comp->getId()}"  class="btn btn-primary show-form-comp">Editovat</button>
+            <a n:href="ChangeBoolColumn! 'compId' => $comp->getId(), 'column' => 'online_registration' " class="btn btn-primary ajax"> {if $comp->get('online_registration')} Zavřít {else}Otevřít {/if} online předregistraci</a>
+            <a n:href="ChangeBoolColumn! 'compId' => $comp->getId(), 'column' => 'visible_result'"  class="btn btn-primary ajax">{if $comp->get('visible_result')} Zavřít {else}Otevřít {/if} výsledky</a>
+            <a n:href="ChangeBoolColumn! 'compId' => $comp->getId(), 'column' => 'editable_result'"  class="btn btn-primary ajax">{if $comp->get('editable_result')} Zavřít {else}Otevřít {/if} editaci výsledků</a>
+            <a n:href="ChangeBoolColumn! 'compId' => $comp->getId(), 'column' => 'visible_prereg'"  class="btn btn-primary ajax">{if $comp->get('visible_prereg')} Skrýt {else}Zobrazit {/if} předregistraci</a>
+
             {control formNewCompControl $comp->getId()}
           </div>
 
@@ -75,15 +84,16 @@
 
                 </td>
               </tr>
-              {control formNewCategoryControl $comp->getId(), $category->getId()}
+              {control "formNewCategoryControl-".$comp->getId()."x" . $category->getId()}
+
             {/foreach}
           </table>
           <button class="btn btn-primary show-form-category" data-id="{$comp->getId()}" >Nova kategorie</button>
         </div>
         </div>
-        {control formNewCategoryControl $comp->getId()}
-
+        {control "formNewCategoryControl-".$comp->getId()}
       </div>
     {/foreach}
+    {/snippet}
   {/if}
 {/block}

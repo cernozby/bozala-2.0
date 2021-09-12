@@ -2,7 +2,7 @@
 
 namespace App\Presenters;
 use App\components\formLogin\formLogin;
-use App\components\formNewCompetitor\formNewCategory;
+use App\components\formNewCategory;
 use App\components\formNewCompetitor\formNewComp;
 use App\components\formNewCompetitor\formNewCompetitor;
 use App\components\formRegistration\formRegistration;
@@ -13,8 +13,11 @@ use App\model\Comp;
 use App\model\Competitor;
 use App\model\CompetitorModel;
 use App\model\CompModel;
+use App\model\Prereg;
+use App\model\PreregModel;
 use App\model\UserClass;
 use App\model\UserModel;
+use Nette\Application\UI\Multiplier;
 use Nette\Application\UI\Presenter;
 use Nette\DI\Container;
 
@@ -48,9 +51,12 @@ abstract class BasePresenter extends Presenter {
   public CategoryModel $categoryModel;
   
   public Category $category;
-  
-  
-  
+
+  public Prereg $prereg;
+
+  public PreregModel $preregModel;
+
+
   public function __construct(Container $container,
                               UserModel $userModel,
                               UserClass $userClass,
@@ -59,8 +65,9 @@ abstract class BasePresenter extends Presenter {
                               Comp $comp,
                               Competitor $competitor,
                               Category $category,
-                              CategoryModel $categoryModel
-  ) {
+                              CategoryModel $categoryModel,
+                              Prereg $prereg,
+                              PreregModel $preregModel) {
     $this->container = $container;
     $this->userModel = $userModel;
     $this->userClass = $userClass;
@@ -70,6 +77,8 @@ abstract class BasePresenter extends Presenter {
     $this->compModel = $compModel;
     $this->category = $category;
     $this->categoryModel = $categoryModel;
+    $this->prereg = $prereg;
+    $this->preregModel = $preregModel;
     parent::__construct();
   }
   
@@ -119,7 +128,9 @@ abstract class BasePresenter extends Presenter {
     return new formNewComp($this->presenter, $this->container, $this->userClass);
   }
   
-  public function createComponentFormNewCategoryControl(): formNewCategory {
-    return new formNewCategory($this->presenter, $this->container, $this->userClass);
+  public function createComponentFormNewCategoryControl(): Multiplier {
+      return new Multiplier(function ($arg) {
+          return new formNewCategory($this->presenter, $this->container, $this->userClass, $arg);
+      });
   }
 }

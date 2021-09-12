@@ -1,4 +1,5 @@
 {block content}
+{varType App\model\Competitor[] $competitors}
   <table class="table">
     <tr>
       <th>Jméno</th>
@@ -6,18 +7,19 @@
       <th>Rok narození</th>
       <th>Akce</th>
     </tr>
-      {foreach $competitors as $item}
+      {foreach $competitors as $competitor}
     <tr>
-        <td>{$item->getFullName()}</td>
-        <td>{$item->get('club')}</td>
-        <td>{$item->get('year')}</td>
+        <td>{$competitor->getFullName()}</td>
+        <td>{$competitor->get('club')}</td>
+        <td>{$competitor->get('year')}</td>
         <td>
-          <button class="btn btn-primary show-form-competitor" data-id="{$item->getId()}">Editovat</button>
-          <a n:href="deleteItem! 'id' => $item->getId(), 'type' => 'Competitor'" class="btn btn-primary">Smazat</a>
-          <a n:href=":Sys:Homepage:prereg 'competitorId' => $item->getId()" class="btn btn-primary">Predregistrovat</a>
+          <button class="btn btn-primary show-form-competitor" data-id="{$competitor->getId()}">Editovat</button>
+          <a n:href="deleteItem! 'id' => $competitor->getId(), 'type' => 'Competitor'" class="btn btn-primary">Smazat</a>
+          {var $anyCatToPrereg = boolval(count($competitor->getCategoryToPrereg()) > 0) }
+          <a n:href=":Sys:Homepage:prereg 'competitorId' => $competitor->getId()" class="btn btn-primary {if !$anyCatToPrereg} disabled {/if}">Predregistrovat</a>
         </td>
     </tr>
-        {control formNewCompetitorControl $item->getId()}
+        {control formNewCompetitorControl $competitor->getId()}
       {/foreach}
   </table>
 {/block}

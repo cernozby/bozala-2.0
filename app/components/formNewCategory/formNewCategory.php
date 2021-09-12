@@ -1,6 +1,7 @@
 <?php
 
-namespace App\components\formNewCompetitor;
+namespace App\components;
+
 
 use App\components\BaseComponent;
 use App\model\CategoryModel;
@@ -9,6 +10,7 @@ use App\model\Constants;
 use App\model\UserClass;
 use Nette\Application\AbortException;
 use \Nette\Application\UI\Form;
+use Nette\Application\UI\Multiplier;
 use Nette\Application\UI\Presenter;
 use Nette\DI\Container;
 use Nette\Utils\ArrayHash;
@@ -18,13 +20,19 @@ class formNewCategory extends BaseComponent {
   
   private $compId;
   private $categoryId;
-  
-  public function render($compId, $categoryId = null) : void {
-    
-    $this->compId = $compId;
-    $this->categoryId = $categoryId;
-    $this->template->compId = $compId;
-    $this->template->categoryId = $categoryId;
+
+  public function __construct(Presenter $presenter, Container $container, UserClass $userClass, $arg) {
+      parent::__construct($presenter, $container, $userClass);
+      $arg = explode('x',$arg);
+      $this->compId = (int)$arg[0];
+      $this->categoryId = isset($arg[1]) ? (int)$arg[1] : null;
+  }
+
+
+    public function render() : void {
+
+    $this->template->compId = $this->compId;
+    $this->template->categoryId = $this->categoryId;
     $this->template->setFile(__DIR__ . '/formNewCategory.latte');
     $this->template->render();
   }

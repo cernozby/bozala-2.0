@@ -125,7 +125,10 @@ Class BaseFactory extends BaseModel
     return $result;
   }
   
-  
+
+  public function changeBoolColumn(string $column) {
+      $this->set($column, !$this->get($column));
+  }
   /**
    * @param $col
    * @param $value

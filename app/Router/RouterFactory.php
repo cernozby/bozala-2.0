@@ -19,7 +19,8 @@ final class RouterFactory
                ->addRoute('administrace', 'Homepage:default')
                ->addRoute('seznam-zavodu', 'Homepage:listOfComps')
                ->addRoute('zavodnici', 'Homepage:listOfCompetitors')
-               ->addRoute('predregistrace[/<competitorId>]', 'Homepage:prereg');
+               ->addRoute('predregistrace[/<competitorId>]', 'Homepage:prereg')
+               ->addRoute('zavod-predregistrace[/<compId>]', 'Homepage:listOfPrereg');
         $router->withModule('Public')
                ->addRoute('registrace', 'Registration:registration')
                ->addRoute('prihlaseni', 'Registration:login')

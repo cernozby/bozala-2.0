@@ -1,0 +1,62 @@
+{varType App\model\UserClass $userClass}
+
+{block content}
+
+    {if !$compId}
+        {varType App\model\Comp[] $comps}
+        {foreach $comps as $comp}
+        <a class="btn icon-btn btn-success font-button-admin text-center" n:href=":Sys:Homepage:listOfPrereg $comp->getId()">
+            <p>{$comp->getCompName()}</p>
+
+        </a>
+        {/foreach}
+    {else}
+        {snippet listOfPrereg}
+        {varType App\model\Category[] $categories}
+        {foreach $categories as $category}
+            {if $userClass->isAdmin()}
+                {var $unpreregCompetitors = $category->getUnpreregCompetitors()}
+            {else}
+                {var $unpreregCompetitors = array()}
+            {/if}
+            <table class="table border table-vertical-middle">
+                <tr>
+                    <th colspan="3">{$category->getComp()->getCompName()} - {$category->getCategoryName()}</th>
+                </tr>
+                <tr>
+                    <th>#</th>
+                    <th>Jméno</th>
+                    <th>Oddil</th>
+                    <th>Rok narození</th>
+                    {if $userClass->isAdmin()}
+                        <th class="admin-part" style="display: none">Akce</th>
+                    {/if}
+                </tr>
+                {foreach $category->getPreregCompetitors() + $unpreregCompetitors as $competitor}
+                    {var $isPrereg = $competitor->isPrereg($category->getId())}
+                    <tr {if !$isPrereg} class="admin-part get-red" style="display: none"{else} class="get-green"{/if} >
+                        <td>{$iterator}</td>
+                        <td>{$competitor->getFullName()}</td>
+                        <td>{$competitor->get('club')}</td>
+                        <td>{$competitor->get('year')}</td>
+                        {if $userClass->isAdmin()}
+                            <td class="admin-part" style="display: none">
+                                <a n:href="prereg! 'categoryId' => $category->getId(), 'competitorId' => $competitor->getId(), 'admin' => '1'" class="btn btn-primary ajax btn-change-registration">
+                                    {if $isPrereg}Odhlasit{else}Predregistrovat{/if}
+                                </a>
+                            </td>
+                        {/if}
+                    </tr>
+                    {control formNewCompetitorControl $competitor->getId()}
+                {/foreach}
+            </table>
+        {/foreach}
+            <button id="changeAdminPart" class="btn btn-primary">Admin verze</button>
+        {/snippet}
+    {/if}
+
+    <script>
+        $('#changeAdminPart').trigger('click');
+    </script>
+{/block}
+
