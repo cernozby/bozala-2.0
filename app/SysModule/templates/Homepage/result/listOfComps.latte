@@ -1,0 +1,6 @@
+{varType App\model\Comp[] $comps}
+{foreach $comps as $comp}
+    <a class="btn icon-btn btn-primary font-button-admin text-center col-3 m-3" n:href=":Sys:Homepage:result 'compId' => $comp->getId()">
+        <i class="fa fa-trophy fa-4x round"></i>&nbsp; <p>{$comp->getCompName()} <br> {$comp->getDate()|date:"d. m. Y"}</p>
+    </a>
+{/foreach}

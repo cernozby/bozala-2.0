@@ -1,25 +1,30 @@
 {block content}
   {varType \App\model\UserClass $userClass}
+  {varType \App\model\CompModel $comp}
 
-  <a class="btn icon-btn btn-success font-button-admin text-center show-form-competitor" href="#">
+  <a class="btn icon-btn btn-primary font-button-admin text-center show-form-competitor col-3 m-3" href="#">
     <i class="fa fa-plus-circle fa-4x round"></i>&nbsp; <p>Nový závodník</p>
   </a>
 
-  <a class="btn icon-btn btn-success font-button-admin text-center show-form-comp" href="#">
+  {if $userClass->isAdmin()}
+  <a class="btn icon-btn btn-primary font-button-admin text-center show-form-comp col-3 m-3" href="#">
     <i class="fa fa-plus-circle fa-4x round"></i>&nbsp; <p>Nový závod</p>
   </a>
+  {/if}
 
-  <a class="btn icon-btn btn-success font-button-admin text-center" n:href=":Sys:Homepage:listOfComps">
-    <i class="fa fa-plus-circle fa-4x round"></i>&nbsp; <p>Seznam závodů</p>
+  <a class="btn icon-btn btn-primary font-button-admin text-center col-3 m-3" n:href=":Sys:Homepage:listOfComps">
+    <i class="fa fa-clipboard fa-4x round"></i>&nbsp; <p> Seznam závodů</p>
   </a>
 
-  <a class="btn icon-btn btn-success font-button-admin text-center" n:href=":Sys:Homepage:listOfCompetitors">
-    <i class="fa fa-plus-circle fa-4x round"></i>&nbsp; <p> {if $userClass->isAdmin()}Moji závodníci{else}Seznam závodníků{/if}</p>
+  <a class="btn icon-btn btn-primary font-button-admin text-center col-3 m-3{if empty($competitors)} disabled {/if}" n:href=":Sys:Homepage:listOfCompetitors">
+    <i class="fa fa-clipboard fa-4x round"></i>&nbsp; <p> {if !$userClass->isAdmin()}Moji závodníci{else}Seznam závodníků{/if}</p>
   </a>
 
-  <a class="btn icon-btn btn-success font-button-admin text-center" n:href=":Sys:Homepage:listOfComps">
-    <i class="fa fa-plus-circle fa-4x round"></i>&nbsp; <p>zadat výsledky</p>
-  </a>
+  {if $comp->getEditableResultComps() && $userClass->isAdmin()}
+    <a class="btn icon-btn btn-primary font-button-admin text-center col-3 m-3" n:href=":Sys:Homepage:addResult">
+      <i class="fa fa-pencil fa-4x round"></i>&nbsp; <p>zadat výsledky</p>
+    </a>
+  {/if}
 {/block}
 
 

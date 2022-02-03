@@ -76,4 +76,11 @@ class Competitor extends BaseFactory
         }
         return $result;
     }
+
+    public function getSumBoulderKvaTopZone() : array {
+        /** @var Result $result */
+        $result = $this->container->createService('Result');
+        $result->initByTypeAndCompetitorId(ResultModel::BOULDER_KVA, $this->getId());
+        return $result->getSumBoulderTopZone();
+    }
 }

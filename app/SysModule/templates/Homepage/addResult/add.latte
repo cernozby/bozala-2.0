@@ -1,0 +1,17 @@
+
+{varType App\model\Category $category}
+
+{var $comp = $category->getComp()}
+
+{if $comp->isBoulderComp()}
+    {include 'resultType\boulder.latte'}
+{/if}
+{if $comp->isLeadComp()}
+    {include 'resultType\lead.latte'}
+{/if}
+{if $comp->isSpeedComp()}
+
+{/if}
+
+
+

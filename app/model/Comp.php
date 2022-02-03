@@ -27,6 +27,8 @@ class Comp extends BaseFactory
   public function isLeadComp() : bool {
     return $this->get('lead') > 0;
   }
+
+  
   
   public function isBoulderComp() : bool {
     return $this->get('boulder') > 0;
@@ -37,6 +39,7 @@ class Comp extends BaseFactory
   }
 
     /**
+     * Vrátí pole categorii
      *
      * @return Category[]
      */
@@ -51,4 +54,20 @@ class Comp extends BaseFactory
   public function getDate() {
       return $this->get('date');
   }
+
+  public function isOpenPrereg() : bool {
+      return boolval($this->get('online_registration'));
+  }
+
+  public function getBoulderResultType() : string {
+      return $this->get('boulder_result');
+  }
+
+  public function isBoulderResultAmateur() : bool {
+      return $this->getBoulderResultType() == CompModel::AMATEUR_RESULT;
+  }
+
+    public function isBoulderResultComp() : bool {
+        return $this->getBoulderResultType() == CompModel::COMP_RESULT;
+    }
 }

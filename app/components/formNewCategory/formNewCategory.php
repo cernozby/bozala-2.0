@@ -28,9 +28,7 @@ class formNewCategory extends BaseComponent {
       $this->categoryId = isset($arg[1]) ? (int)$arg[1] : null;
   }
 
-
-    public function render() : void {
-
+  public function render() : void {
     $this->template->compId = $this->compId;
     $this->template->categoryId = $this->categoryId;
     $this->template->setFile(__DIR__ . '/formNewCategory.latte');

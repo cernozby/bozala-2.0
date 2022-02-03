@@ -44,7 +44,34 @@ $(document).ready(function () {
         }
     });
 
+    //addFlashmessage
 });
+
+function addFlashmessage(message, type) {
+    $("#flash-message").append(
+        '<div id="myAlert" class="temporary"> ' +
+        '<div id="myAlert" class="alert alert-' +  type + ' flash-message" role="alert">' +
+        message +
+        '</div></div>');
+    setTimeout(function () {
+        $('.temporary').hide('slow', function(){ $(this).remove(); });
+    }, 4000);
+}
+
+function saveResult(dataTable, link) {
+    console.log('aaaadada');
+    $.ajax({
+        type: 'POST',
+        url:  link,
+    data: dataTable,
+        success: function () {
+        addFlashmessage('Výsledky byly úspěšně uloženy!', 'success');
+    },
+    error: function () {
+        addFlashmessage('Výsledky se nepovedlo uložit!', 'danger');
+    }
+});
+}
 
 
 

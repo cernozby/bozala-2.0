@@ -1,0 +1,8 @@
+{varType App\model\Category $category}
+{varType App\model\Comp $comp}
+
+{if $comp->get('boulder') && $comp->isBoulderResultComp()}
+    {include 'resultType/boulder-profi.latte'}
+{elseif $comp->get('boulder') && $comp->isBoulderResultAmateur()}
+    {include 'resultType/boulder-amateur.latte'}
+{/if}

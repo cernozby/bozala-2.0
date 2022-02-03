@@ -104,11 +104,11 @@ Class BaseFactory extends BaseModel
   public function load(): void {
     $this->data = $this->getTable()->select('*')->where($this->primary . ' = ?', $this->getId())->fetch();
   }
-  
-  /**
-   * @param $col
-   * @return |null
-   */
+
+    /**
+     * @param $col
+     * @return null
+     */
   public function get($col) {
     return $this->data->$col ?? null;
   }

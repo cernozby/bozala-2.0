@@ -1,0 +1,9 @@
+{block content}
+    {if $compId && $categoryId}
+        {include 'result/result.latte'}
+    {elseif $compId}
+        {include 'result/listOfCategories.latte'}
+    {else}
+        {include 'result/listOfComps.latte'}
+    {/if}
+{/block}

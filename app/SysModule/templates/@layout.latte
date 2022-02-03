@@ -1,3 +1,4 @@
+{varType App\model\UserClass $userClass}
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,7 +14,6 @@
 
 	<title>{ifset title}{include title|stripHtml} | {/ifset}Nette Web</title>
 </head>
-
 <body>
 	<div id="flash-message">
 		{snippet flashmessage}
@@ -50,6 +50,9 @@
 			<li class="nav-item">
 				<a class="nav-link text-white" n:href=":Sys:Homepage:listOfPrereg">Předregistrace</a>
 			</li>
+			<li class="nav-item">
+				<a class="nav-link text-white" n:href=":Sys:Homepage:result">Výsledky</a>
+			</li>
 		</ul>
 		<div class="d-flex">
 			<ul class="navbar-nav me-auto mb-2 mb-lg-0">
@@ -64,7 +67,7 @@
 	</div>
 </nav>
 
-<div class="container">
+<div class="text-center pt-3 pb-3" >
 	{include content}
 </div>
 
@@ -81,7 +84,7 @@
 <!-- modals -->
 	{control formNewCompetitorControl}
 
-	{control formNewCompControl}
+	{control formNewCompControl-0}
 
 
 	{block scripts}

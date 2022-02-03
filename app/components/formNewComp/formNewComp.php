@@ -16,12 +16,16 @@ use Nette\Utils\ArrayHash;
 class formNewComp extends BaseComponent {
   
   private $compId;
-  
-  public function render($compId = null) : void {
-    $this->compId = $compId;
-    $this->template->compId = $compId;
-    $this->template->setFile(__DIR__ . '/formNewComp.latte');
-    $this->template->render();
+
+  public function __construct(Presenter $presenter, Container $container, UserClass $userClass, $compId) {
+      parent::__construct($presenter, $container, $userClass);
+      $this->compId = $compId == 0 ? null: $compId;
+  }
+
+  public function render() : void {
+        $this->template->compId = $this->compId;
+        $this->template->setFile(__DIR__ . '/formNewComp.latte');
+        $this->template->render();
   }
   
   public function createComponentNewCompForm() : Form {

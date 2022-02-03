@@ -58,10 +58,91 @@ class Category extends BaseFactory
   }
 
     /**
-     * @return null
+     * @return string|null
      */
-    public function getName() {
+    public function getName() : string {
       return $this->get('name');
+  }
+
+    /**
+     * @return string | null
+     */
+  public function getGender() : string{
+        return $this->get('gender');
+  }
+
+    /**
+     * Pokud muzu zobrazit vysledky, vraci true;
+     *
+     * @return bool
+     */
+  public function visible_result() : bool {
+      return $this->get('visible_result') == 1;
+  }
+
+  public function getPointsForBoulder() {
+      /** @var ResultModel $resultModel */
+      $resultModel = $this->container->createService('resultModel');
+      return $resultModel->getBoulderValueAmateurResult($this->getBoulderResult('boulder_kva'));
+  }
+
+    /**
+     * Vrátí výsledky jako pole
+     *
+     * @param string $type | typ výsledků (boulder_kva, lead_fi,....)
+     * @return array
+     */
+  public function getBoulderResult(string $type): array {
+      /** @var ResultModel $resultModel */
+      $resultModel = $this->container->createService('resultModel');
+      return $resultModel->getResult($type, $this->getId());
+  }
+
+    /**
+     * Vrati kompletní výsledky ve tvaru
+     * (bx => r)n
+     * resultColomun => array
+     * resultKey => x
+     * place => int
+     * competitor => class competitor
+     *
+     * @param string $roundType | typ kola - kvalifikace | final
+     */
+  public function getBoulderFullResult(string $roundType): array {
+      $resultType = $this->getComp()->get('boulder_result');
+      $results = $this->getBoulderResult('boulder_kva');
+      if (!$results) {
+          return array();
+      }
+
+      /** @var ResultModel $resultModel */
+      $resultModel = $this->container->createService('resultModel');
+
+
+      switch ($resultType) {
+          case CompModel::AMATEUR_RESULT:
+              return $this->mergeCompetitorWithResult($resultModel->getBoulderFullResultAmateurSystem($resultType, $results));
+          case CompModel::COMP_RESULT:
+              return $this->mergeCompetitorWithResult($resultModel->getBoulderFullResultCompSystem($resultType, $results));
+          default:
+              throw new \InvalidArgumentException("Wrong result system");
+      }
+  }
+
+    /**
+     * Přidá do pole výsledků pole competitor s instanci Competitor
+     *
+     * @param array $result
+     * @return array
+     */
+  private function mergeCompetitorWithResult(array $result): array {
+      foreach ($this->getPreregCompetitors() as $competitor) {
+          if (array_key_exists($competitor->getId(), $result)) {
+              $result[$competitor->getId()]['competitor'] = $competitor;
+          }
+      }
+
+      return $result;
   }
 
     /**
