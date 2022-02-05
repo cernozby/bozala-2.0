@@ -15,6 +15,7 @@
 	<title>{ifset title}{include title|stripHtml} | {/ifset}Nette Web</title>
 </head>
 <body>
+	<div class="body-without-footer">
 	<div id="flash-message">
 		{snippet flashmessage}
 			<div n:foreach="$flashes as $flash" id="myAlert">
@@ -71,8 +72,8 @@
 	{include content}
 </div>
 
-
-<footer class="text-center text-lg-start bg-primary">
+</div>
+<footer class="text-center text-lg-start bg-primary footer">
 	<!-- Copyright -->
 	<div class="text-center p-3 text-white">
 		© {date('Y')} Zbysek Cernohous:

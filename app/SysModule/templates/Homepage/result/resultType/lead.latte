@@ -1,0 +1,40 @@
+{varType App\model\Category $category}
+{varType App\model\ResultModel $resultModel}
+{var $results = $category->getLeadFullResult(App\model\ResultModel::LEAD_KVA)}
+<div class="table-responsive" style="padding: 15px; margin-bottom: 30px">
+    <table class="table table-add-result border" style="padding: 15px !important;">
+        <tr>
+            <th colspan="{5 + ($category->getComp()->get('lead') * 2) }">
+                <h2>Obtížnost {if $category->getComp()->get('lead_final')}kvalifikace {/if}- {$category->getName()}</h2>
+            </th>
+        </tr>
+        <tr>
+            <th>Pořadí</th>
+            <th>Jméno</th>
+            <th>Oddil</th>
+            <th>Rok narození</th>
+
+            {for $i = 1; $i <= $category->getComp()->get('lead'); $i++}
+                <th>cesta&nbsp;{$i}</th>
+                <th>Q{$i}</th>
+            {/for}
+            <th>Qn</th>
+        </tr>
+        {foreach $results as $row}
+            {varType \App\model\Competitor $competitor}
+            {var $competitor = $row['competitor']}
+            <tr>
+                <td>{$results[$competitor->getId()]['place']}</td>
+                <td>{$competitor->getFullName()}</td>
+                <td>{$competitor->get('club')}</td>
+                <td>{$competitor->get('year')}</td>
+
+                {for $i = 1; $i <= $category->getComp()->get('lead'); $i++}
+                    <td>{$results[$competitor->getId()]['route-'.$i]|fillEmptyStr|stripHtml}</td>
+                    <td>{$results[$competitor->getId()]['route-'.$i.'-q']}</td>
+                {/for}
+                    <td>{$results[$competitor->getId()]['resultKey']}</td>
+            </tr>
+        {/foreach}
+    </table>
+</div>

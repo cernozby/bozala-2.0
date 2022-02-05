@@ -10,6 +10,8 @@ use Nette\Application\AbortException;
 use \Nette\Application\UI\Form;
 use Nette\Application\UI\Presenter;
 use Nette\DI\Container;
+use Nette\Forms\Form as FormAlias;
+use Nette\Http\FileUpload;
 use Nette\Utils\ArrayHash;
 
 
@@ -48,11 +50,10 @@ class formNewComp extends BaseComponent {
       ->setPrompt('--vyberte-- ');
     $form->addSelect('boulder_result', "Typ výsledků: ", CompModel::$result_type)
       ->setPrompt('--vyberte-- ');
-    $form->addSelect('speed_result', "Typ výsledků: ", CompModel::$result_type)
-      ->setPrompt('--vyberte-- ');
     $form->addSelect('lead_result', "Typ výsledků: ", CompModel::$result_type)
       ->setPrompt('--vyberte-- ');
-    
+    $form->addUpload('propo', 'Propozice: ');
+
     if ($this->compId) {
       $data = $this->container->createService('Comp')->initId($this->compId)->getRowAsArray();
       $data['date'] = $data['date']->format('Y-m-d');
@@ -72,20 +73,25 @@ class formNewComp extends BaseComponent {
    */
   public function newCompFormSucceed(Form $form, ArrayHash $values): void {
     try {
-      
-      $compId = $values->offsetGet('id_comp');
+        /** @var FileUpload $propo */
+        $propo = $values->offsetGet('propo');
+        bdump($propo->move("/www/propo/" . substr(md5(mt_rand()), 0, 7) . 'aaa.pdf'));
+
+        $compId = $values->offsetGet('id_comp');
       $values->offsetUnset('id_comp');
       $values->offsetSet('user_id', $this->userClass->getId());
-      
+      $values->offsetUnset('propo');
+
+
       if ($compId) {
         $this->container->createService('Comp')->initId($compId)->update($values);
         $this->presenter->flashMessage('Editace proběhla úspešně.');
       } else {
         $this->container->createService('CompModel')->newComp($values);
-        $this->presenter->flashMessage('Registrace proběhla úspešně.');
+        $this->presenter->flashMessage('Závod byl úspešně vytvořen!.');
       }
     } catch (\Exception $e) {
-      $this->presenter->flashMessage('Neúspešná registrace zavodnika'. $e->getMessage() );
+      $this->presenter->flashMessage('Při vytváření závodu se vyskytla chyba!.'. $e->getMessage() );
     }
     $this->presenter->redirect('this');
     

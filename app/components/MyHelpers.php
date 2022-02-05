@@ -34,7 +34,7 @@ class MyHelpers {
      */
   public static function fillEmptyStr($variable): string {
       if (self::isEmpty($variable)) {
-          return 'X';
+          return "&#10060;";
       }
       return $variable;
   }
@@ -66,7 +66,7 @@ class MyHelpers {
 
 
     private static function isEmpty($variable): bool {
-        return in_array($variable, [" ", "", 0]);
+        return $variable === " " or $variable === "" or $variable == 0;
     }
 }
 ?>

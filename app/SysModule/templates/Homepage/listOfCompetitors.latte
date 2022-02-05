@@ -1,6 +1,7 @@
 {block content}
 {varType App\model\Competitor[] $competitors}
-  <table class="table">
+<div class="table-responsive container">
+  <table class="table border table-vertical-middle">
     <tr>
       <th>Jméno</th>
       <th>Oddil</th>
@@ -13,14 +14,15 @@
         <td>{$competitor->get('club')}</td>
         <td>{$competitor->get('year')}</td>
         <td>
-          <button class="btn btn-primary show-form-competitor" data-id="{$competitor->getId()}">Editovat</button>
-          <a n:href="deleteItem! 'id' => $competitor->getId(), 'type' => 'Competitor'" class="btn btn-primary">Smazat</a>
+          <button class="btn btn-primary show-form-competitor m-1" data-id="{$competitor->getId()}">Editovat</button>
+          <a n:href="deleteItem! 'id' => $competitor->getId(), 'type' => 'Competitor'" class="btn btn-primary m-1">Smazat</a>
           {var $anyCatToPrereg = boolval(count($competitor->getCategoryToPrereg()) > 0) }
-          <a n:href=":Sys:Homepage:prereg 'competitorId' => $competitor->getId()" class="btn btn-primary {if !$anyCatToPrereg} disabled {/if}">Predregistrovat</a>
+          <a n:href=":Sys:Homepage:prereg 'competitorId' => $competitor->getId()" class="btn btn-primary m-1{if !$anyCatToPrereg} disabled {/if}">Predregistrovat</a>
         </td>
     </tr>
         {control formNewCompetitorControl $competitor->getId()}
       {/foreach}
   </table>
+</div>
 {/block}
 

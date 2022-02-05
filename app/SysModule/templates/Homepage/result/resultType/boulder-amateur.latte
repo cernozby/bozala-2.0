@@ -9,7 +9,7 @@
         <table class="table table-add-result border" style="padding: 15px !important;">
             <tr>
                 <th colspan="{5 + ($category->getComp()->get('boulder') * 2 )}">
-                    <h2>Boulder kvalifikace - {$category->getName()}</h2>
+                    <h2>Boulder {if $category->getComp()->get('boulder_final')}kvalifikace {/if}- {$category->getName()}</h2>
                 </th>
             </tr>
             <tr>
@@ -37,7 +37,6 @@
                     {for $i = 1; $i <= $category->getComp()->get('boulder'); $i++}
                         <td>{$row['b-'. $i .'-z']|boulderAmateur|stripHtml}</td>
                         <td>{$row['b-'. $i .'-t']|boulderAmateur|stripHtml}</td>
-                        {dump $row['b-'. $i .'-z']}
                     {/for}
                     <td>{$row['resultColumn']|decimalNumber}<td>
                 </tr>

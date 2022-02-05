@@ -79,11 +79,23 @@ Class HomepagePresenter extends BasePresenter
       if ($categoryId && $compId) {
           $this->category->initId($categoryId);
           $this->template->category = $this->category;
+          $this->template->competitors = $this->userClass->isAdmin() ?
+              $this->category->getPreregCompetitors() :
+              $this->category->getPreregCompetitorsByUser($this->userClass->getId());
+
       } elseif ($compId) {
           $this->comp->initId($compId);
-          $this->template->categories = $this->comp->getCategory();
+          if ($this->userClass->isAdmin()) {
+              $this->template->categories = $this->comp->getCategory();
+          } else {
+              $this->template->categories = $this->comp->getCategoryForUser($this->userClass->getId());
+          }
       } else {
-          $this->template->comps = $this->compModel->getEditableResultComps();
+          if ($this->userClass->isAdmin()) {
+              $this->template->comps = $this->compModel->getEditableResultComps();
+          } else {
+              $this->template->comps = $this->compModel->getEditableResultForUser($this->userClass->getId());
+          }
       }
   }
 

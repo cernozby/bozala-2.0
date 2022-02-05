@@ -1,6 +1,7 @@
 {varType App\model\Category $category}
 {varType App\model\ResultModel $resultModel}
-{var $results = $resultModel->resultToCompetitor($category->getBoulderResult(App\model\ResultModel::BOULDER_KVA))}
+{varType App\model\Competitor[] $competitors}
+{var $results = $resultModel->resultToCompetitor($category->getResult(App\model\ResultModel::BOULDER_KVA))}
 <div class="table-responsive" style="padding: 15px; margin-bottom: 30px">
     <table class="table table-add-result border" style="padding: 15px !important;">
         <tr>
@@ -19,7 +20,7 @@
                 <th>B{$i}T</th>
             {/for}
         </tr>
-        {foreach $category->getPreregCompetitors() as $competitor}
+        {foreach $competitors as $competitor}
             {var $resultExist = key_exists($competitor->getId(), $results)}
             <tr id="boulder-kva" data-competitor="{$competitor->getId()}">
                 <td>{$competitor->getFullName()}</td>
@@ -27,8 +28,8 @@
                 <td>{$competitor->get('year')}</td>
 
                 {for $i = 1; $i <= $category->getComp()->get('boulder'); $i++}
-                    <td class="have-input" data-key="b-{$i}-z"><input  class="inside-td" value="{if $resultExist}{$results[$competitor->getId()]['b-'. $i .'-z']}{else} {/if}" type="text"/></td>
-                    <td class="have-input" data-key="b-{$i}-t"><input class="inside-td" value="{if $resultExist}{$results[$competitor->getId()]['b-'. $i .'-t']}{else} {/if}" type="text"/></td>
+                    <td class="have-input" data-key="b-{$i}-z"><input  class="inside-td" value="{if $resultExist}{$results[$competitor->getId()]['b-'. $i .'-z']}{/if}" type="text"/></td>
+                    <td class="have-input" data-key="b-{$i}-t"><input class="inside-td" value="{if $resultExist}{$results[$competitor->getId()]['b-'. $i .'-t']}{/if}" type="text"/></td>
                 {/for}
             </tr>
         {/foreach}

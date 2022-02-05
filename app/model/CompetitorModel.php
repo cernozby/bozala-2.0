@@ -47,10 +47,11 @@ class CompetitorModel extends BaseModel
     public function getCompetitorsBetweenYear(int $smallerYear, int $biggerYear, string $gender) : array {
         $result = $this->getTable()->select('*')
             ->where('year >= ?', $smallerYear)
-            ->where('year <= ?', $biggerYear)
-            ->where('gender = ?', $gender)
-            ->fetchAll();
+            ->where('year <= ?', $biggerYear);
+        if ($gender != CategoryModel::BOTH) {
+            $result->where('gender = ?', $gender);
+        }
 
-        return $this->arrayToObject($result);
+        return $this->arrayToObject($result->fetchAll());
     }
 }

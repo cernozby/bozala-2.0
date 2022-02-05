@@ -76,4 +76,24 @@ class Result extends BaseFactory
         return $this->initId($result->id_result);
     }
 
+    /**
+     * @return Competitor
+     */
+    public function getCompetitor() : Competitor {
+        return $this->container->createService('Competitor')->initId($this->get('competitor_id'));
+
+    }
+
+    /**
+     * @return Category
+     */
+    public function getCategory() : Category {
+        return $this->container->createService('Category')->initId($this->get('category_id'));
+
+    }
+
+    public function getCompetitorId() {
+        return $this->get('competitor_id');
+    }
+
 }

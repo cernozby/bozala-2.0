@@ -20,7 +20,7 @@
     <i class="fa fa-clipboard fa-4x round"></i>&nbsp; <p> {if !$userClass->isAdmin()}Moji závodníci{else}Seznam závodníků{/if}</p>
   </a>
 
-  {if $comp->getEditableResultComps() && $userClass->isAdmin()}
+  {if $comp->getEditableResultComps() && ($userClass->isAdmin() || $comp->getEditableResultForUser($userClass->getId()))}
     <a class="btn icon-btn btn-primary font-button-admin text-center col-3 m-3" n:href=":Sys:Homepage:addResult">
       <i class="fa fa-pencil fa-4x round"></i>&nbsp; <p>zadat výsledky</p>
     </a>

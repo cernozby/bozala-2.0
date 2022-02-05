@@ -1,11 +1,14 @@
 {varType App\model\Category[] $categories}
 {foreach $categories as $category}
-    <a class="btn icon-btn
+    <a class="btn icon-btn col-3 m-3
         {if $category->getGender() == App\model\CategoryModel::MALE} btn-primary
         {elseif $category->getGender() == App\model\CategoryModel::FEMALE} btn-danger
         {else}btn-success{/if}
 
         font-button-admin text-center" n:href=":Sys:Homepage:addResult 'compId' => $compId, 'categoryId' => $category->getId()">
-        <i class="fa fa-plus-circle fa-4x round"></i>&nbsp; <p>{$category->getCategoryName()}</p>
+        <i class="fa
+            {if $category->getGender() == App\model\CategoryModel::MALE} fa-male
+            {else} fa-female {/if}
+            fa-4x round"></i>&nbsp; <p>{$category->getCategoryName()}</p>
     </a>
 {/foreach}

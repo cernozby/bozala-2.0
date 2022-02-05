@@ -41,8 +41,10 @@
             <div class="col-md-8 form-group pb-3">{input speed class => 'form-control'}</div>
             <div class="{$classSpeed} speed_final col-md-4 form-group pt-2 font-weight-bold">{label speed_final /}</div>
             <div class="{$classSpeed} speed_final col-md-8 form-group pb-3">{input speed_final class => 'form-control'}</div>
-            <div class="{$classSpeed} speed_result col-md-4 form-group pt-2 font-weight-bold">{label speed_result /}</div>
-            <div class="{$classSpeed} speed_result col-md-8 form-group pb-3">{input speed_result class => 'form-control'}</div>
+
+            <div class="col-md-4 form-group pt-2 font-weight-bold">{label propo /}</div>
+            <div class="col-md-8 form-group pb-3 ">{input propo accept => 'application/pdf'}</div>
+
 
             <div class="col-md-12 pb-3 ">
               {input submit class=>"btn btn-primary btn-block col-md-12"}
@@ -69,10 +71,8 @@
         $("#frm-formNewCompControl-newCompForm-speed").on("change", function () {
             if ($(this).val() !== '') {
                 $(".speed_final").show("slow");
-                $(".speed_result").show("slow");
             } else {
                 $(".speed_final").hide("slow");
-                $(".speed_result").hide("slow");
             }
         });
 

@@ -47,6 +47,21 @@ class Comp extends BaseFactory
     return $this->container->createService('categoryModel')->getByCompId($this->getId());
   }
 
+  public function getCategoryForUser($userId) {
+      $obj = [];
+      $array = $this->db->query("SELECT c.* FROM category c 
+                            JOIN prereg p ON p.category_id = c.id_category 
+                            JOIN competitor r ON r.id_competitor = p.competitor_id
+                            WHERE r.user_id = ? AND c.comp_id = ?
+                            GROUP BY c.id_category", $userId, $this->getId())->fetchAll();
+
+
+      foreach ($array as $item) {
+          $obj[$item->offsetGet('id_category')] = $this->container->createService('category')->initId($item->offsetGet('id_category'));
+      }
+      return $obj;
+  }
+
   public function getCompName() : string {
       return $this->get('name');
   }

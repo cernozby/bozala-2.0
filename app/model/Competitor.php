@@ -49,13 +49,10 @@ class Competitor extends BaseFactory
     }
 
     public function isPrereg(int $categoryId): bool {
-
         /** @var Prereg $prereg */
         $prereg = $this->container->createService('prereg');
 
         return $prereg->initByCategoryIdAndCompetitorId($categoryId, $this->getId()) !== null;
-
-
     }
 
     public function getCategoryToPrereg(): array {
@@ -69,7 +66,7 @@ class Competitor extends BaseFactory
                 if (
                     $category->get('year_young') >= $this->get('year') &&
                     $category->get('year_old') <= $this->get('year') &&
-                    $category->get('gender') == $this->get('gender')
+                    ($category->get('gender') == $this->get('gender') || $category->get('gender') == CategoryModel::BOTH)
                 )
                     $result[] = $category;
             }

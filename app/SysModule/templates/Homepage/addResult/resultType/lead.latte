@@ -1,4 +1,8 @@
 {varType App\model\Category $category}
+{varType App\model\ResultModel $resultModel}
+{varType App\model\Competitor[] $competitors}
+{var $results = $resultModel->resultToCompetitor($category->getResult(App\model\ResultModel::LEAD_KVA))}
+
 <div class="table-responsive" style="padding: 15px; margin-bottom: 30px">
     <table class="table table-add-result border" style="padding: 15px !important;">
         <tr>
@@ -16,14 +20,18 @@
                 <th>cesta&nbsp;{$i}</th>
             {/for}
         </tr>
-        {foreach $category->getPreregCompetitors() as $competitor}
+        {foreach $competitors as $competitor}
             <tr id="lead-kva" data-competitor="{$competitor->getId()}">
                 <td>{$competitor->getFullName()}</td>
                 <td>{$competitor->get('club')}</td>
                 <td>{$competitor->get('year')}</td>
 
                 {for $i = 1; $i <= $category->getComp()->get('lead'); $i++}
-                    <td class="have-input" data-key="route-{$i}"><input class="inside-td" type="text"/></td>
+                    <td class="have-input" data-key="route-{$i}">
+                        <input class="inside-td" type="text"
+                               value="{if key_exists($competitor->getId(), $results)}{$results[$competitor->getId()]["route-".$i]}{/if}"/>
+
+                    </td>
                 {/for}
             </tr>
         {/foreach}
@@ -44,7 +52,6 @@
                 dataTable[idRacer][$(this).data('key')] = $(this).find("input").val();
             })
         });
-        console.log(dataTable);
         saveResult(dataTable, {link saveResult!});
     });
 

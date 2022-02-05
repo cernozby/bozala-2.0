@@ -59,7 +59,6 @@ function addFlashmessage(message, type) {
 }
 
 function saveResult(dataTable, link) {
-    console.log('aaaadada');
     $.ajax({
         type: 'POST',
         url:  link,

@@ -15,6 +15,8 @@
 </head>
 
 <body>
+<div class="body-without-footer">
+
 <div n:foreach="$flashes as $flash">
 	<div class="container">
 		<!-- Trigger the modal with a button -->
@@ -71,8 +73,8 @@
 		{include content}
 	</div>
 
-
-	<footer class="text-center text-lg-start bg-primary">
+</div>
+	<footer class="text-center text-lg-start bg-primary footer">
 		<!-- Copyright -->
 		<div class="text-center p-3 text-white">
 			© {date('Y')} Zbysek Cernohous:

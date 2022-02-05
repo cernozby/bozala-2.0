@@ -36,9 +36,6 @@ class Category extends BaseFactory
         $competitorModel = $this->container->createService('competitorModel');
         $unprereg = $competitorModel->getCompetitorsBetweenYear($this->get('year_old'), $this->get('year_young'), $this->get('gender'));
         $prereg = $this->getPreregCompetitors();
-        bdump($prereg);
-        bdump($unprereg);
-
         return array_diff_key($unprereg, $prereg);
     }
     /**
@@ -49,6 +46,15 @@ class Category extends BaseFactory
       $competitorModel = $this->container->createService('competitorModel');
       return $competitorModel->getByCategory($this->getId());
   }
+
+    /**
+     * @return Competitor[]
+     */
+    public function getPreregCompetitorsByUser($userId) : array {
+        /** @var CompetitorModel $competitorModel */
+        $competitorModel = $this->container->createService('competitorModel');
+        return array_filter($competitorModel->getByCategory($this->getId()), (fn ($item) => $item->get('user_id') == $userId));
+    }
 
     /**
      * @return Comp|null
@@ -83,7 +89,7 @@ class Category extends BaseFactory
   public function getPointsForBoulder() {
       /** @var ResultModel $resultModel */
       $resultModel = $this->container->createService('resultModel');
-      return $resultModel->getBoulderValueAmateurResult($this->getBoulderResult('boulder_kva'));
+      return $resultModel->getBoulderValueAmateurResult($this->getResult('boulder_kva'));
   }
 
     /**
@@ -92,10 +98,24 @@ class Category extends BaseFactory
      * @param string $type | typ výsledků (boulder_kva, lead_fi,....)
      * @return array
      */
-  public function getBoulderResult(string $type): array {
+  public function getResult(string $type): array {
       /** @var ResultModel $resultModel */
       $resultModel = $this->container->createService('resultModel');
       return $resultModel->getResult($type, $this->getId());
+  }
+
+  public function getLeadFullResult(): array {
+      $results = $this->getResult(ResultModel::LEAD_KVA);
+      if (!$results) {
+          return array();
+      }
+
+      /** @var ResultModel $resultModel */
+      $resultModel = $this->container->createService('resultModel');
+
+      return $this->mergeCompetitorWithResult($resultModel->getLeadFullResult($results));
+
+
   }
 
     /**
@@ -110,7 +130,7 @@ class Category extends BaseFactory
      */
   public function getBoulderFullResult(string $roundType): array {
       $resultType = $this->getComp()->get('boulder_result');
-      $results = $this->getBoulderResult('boulder_kva');
+      $results = $this->getResult('boulder_kva');
       if (!$results) {
           return array();
       }

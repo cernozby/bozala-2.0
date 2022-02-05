@@ -103,7 +103,7 @@ class ResultModel extends BaseModel
      * @param Result[] $data
      */
     public function getBoulderValueAmateurResult(array $data) {
-        $result = array_map(fn ($value) : int => 0,array_pop($data)->getResultAsArray());
+        $result = array_map(fn ($value) : int => 0, current($data)->getResultAsArray());
         foreach ($data as $item) {
             foreach ($item->getResultAsArray() as $key => $value) {
                 if ($value > 0) {
@@ -113,6 +113,79 @@ class ResultModel extends BaseModel
         }
         //ohodnoceni bouldru
         return array_map(fn($value): float => $value > 0 ? self::BOULDER_AMATEUR_RESULT_VALUE / $value : 0, $result);
+    }
+
+
+    public function leadRoutePlace ($data) {
+        $helpArray = array(); //pomocny vysledek pro jednu cestu
+        $results = array(); // celkovy vysledek, format idCompetiro => [route-N => misto]
+
+        //pokud je dalsi cesta, podminka je true
+        while(!empty(end($data))) {
+
+            //srovnani pole do formatu idCompetitor => idRoute
+            foreach ($data as $key => $item) {
+                $routeKey = array_key_first($item);
+                $helpArray[$key] = array_shift($data[$key]);
+            }
+
+
+            //nahrazeni hodnot top a +
+            $helpArray = array_map(fn($value) => strtolower($value) == "top" ? 1000 : $value, $helpArray);
+            $helpArray = array_map(
+                fn($value) => strpos($value, "+") ? (((int)str_replace("+", '', $value)) * 2) + 1 : (int)$value * 2,
+                $helpArray);
+
+            //serazeni pole
+            uasort($helpArray, (fn($a, $b) => $a < $b ? 1 : -1));
+            $helpArray = array_map(fn($value) => array('resultKey' => $value), $helpArray);
+
+            $this->addPlace($helpArray);
+
+            foreach ($helpArray as $key => $value) {
+                $results[$key][$routeKey . "-q"] = $value['place'];
+            }
+        }
+        return $results;
+
+    }
+
+    public function leadRoutePlaceForAll($data) {
+        foreach ($data as $key => $item) {
+            $data[$key] = pow(array_product($item), (1 / count($item)) );
+        }
+
+        return $data;
+    }
+
+
+    /**
+     * @param Result[] $data
+     * @return array
+     */
+    public function getLeadFullResult(array $data) {
+        $result = array();
+        $helpArray = array();
+
+        foreach ($data as $item) {
+            $helpArray[$item->getCompetitorId()] = $item->getResultAsArray();
+        }
+        $helpArray = $this->leadRoutePlace($helpArray);
+
+        $resultForAllRoute = $this->leadRoutePlaceForAll($helpArray);
+
+
+        foreach ($data as $item) {
+            $result[$item->get('competitor_id')] =
+                $item->getResultAsArray() +
+                ['resultColumn' => $resultForAllRoute[$item->getCompetitorId()]] +
+                ['resultKey' => number_format($resultForAllRoute[$item->getCompetitorId()],2,'.','')] +
+                $helpArray[$item->getCompetitorId()];
+        }
+        uasort($result, (fn($a, $b): int => $a['resultColumn'] > $b['resultColumn'] ? 1 : -1));
+
+        $this->addPlace($result);
+        return $result;
     }
     /**
      * @param string $resultType
@@ -124,23 +197,19 @@ class ResultModel extends BaseModel
 
         $boulderValue = $this->getBoulderValueAmateurResult($data);
         foreach ($data as $item) {
-            $result[] = ['result' => $item, 'resultColumn' => $item->getPointPerBoulder($boulderValue)];
-        }
+            $points = $item->getPointPerBoulder($boulderValue);
 
-        //serazeni podle vysledku pro profi boulder
-        usort($result, (fn($a, $b): int => $a['resultColumn'] < $b['resultColumn'] ? 1 : -1));
-
-        $newResult = array();
-        foreach ($result as $item) {
-            $newResult[$item['result']->get('competitor_id')] =
-                $item['result']->getResultAsArray() +
-                ['resultColumn' => $item['resultColumn']] +
-                ['resultKey' =>    number_format($item['resultColumn'],2,'.','')]+
+            $result[$item->get('competitor_id')] =
+                $item->getResultAsArray() +
+                ['resultColumn' => $points] +
+                ['resultKey' =>    number_format($points,2,'.','')]+
                 ['pointsForBoulder' => $boulderValue];
         }
 
-        $this->addPlace($newResult);
-        return $newResult;
+        //serazeni podle vysledku pro profi boulder
+        uasort($result, (fn($a, $b): int => $a['resultColumn'] < $b['resultColumn'] ? 1 : -1));
+        $this->addPlace($result);
+        return $result;
 
     }
 

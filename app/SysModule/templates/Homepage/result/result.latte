@@ -1,8 +1,16 @@
 {varType App\model\Category $category}
 {varType App\model\Comp $comp}
+{var $multi = []}
 
 {if $comp->get('boulder') && $comp->isBoulderResultComp()}
-    {include 'resultType/boulder-profi.latte'}
-{elseif $comp->get('boulder') && $comp->isBoulderResultAmateur()}
+    {php $multi[] = 'boulder-comp'}
+    {include 'resultType/boulder-comp.latte'}
+{/if}
+{if $comp->get('boulder') && $comp->isBoulderResultAmateur()}
+    {php $multi[] = 'boulder-amateur'}
     {include 'resultType/boulder-amateur.latte'}
+{/if}
+{if $comp->get('lead')}
+    {php $multi[] = 'lead-comp'}
+    {include 'resultType/lead.latte'}
 {/if}
