@@ -6,6 +6,7 @@ use Nette\Application\LinkGenerator;
 use Nette\Database\Explorer;
 use Nette\DI\Container;
 use Nette\Security\User;
+use Nette\Utils\FileSystem;
 
 /**
  * Class Comp
@@ -24,7 +25,16 @@ class Comp extends BaseFactory
     parent::__construct($database, $container, $linkGenerator);
   }
 
-  public function isLeadComp() : bool {
+  public function delete(): void {
+      if ($this->get('propo_path')) {
+          $name = array_reverse(explode('/', $this->get('propo_path')))[0];
+          FileSystem::delete("../www/pdf/" . $name);
+      }
+      parent::delete();
+
+  }
+
+    public function isLeadComp() : bool {
     return $this->get('lead') > 0;
   }
 

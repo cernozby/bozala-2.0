@@ -80,4 +80,5 @@ class Competitor extends BaseFactory
         $result->initByTypeAndCompetitorId(ResultModel::BOULDER_KVA, $this->getId());
         return $result->getSumBoulderTopZone();
     }
+
 }

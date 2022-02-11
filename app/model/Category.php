@@ -104,6 +104,17 @@ class Category extends BaseFactory
       return $resultModel->getResult($type, $this->getId());
   }
 
+  public function getSpeedFullResult() : array {
+      $results = $this->getResult(ResultModel::SPEED_KVA);
+      if (!$results) {
+          return array();
+      }
+      /** @var ResultModel $resultModel */
+      $resultModel = $this->container->createService('resultModel');
+
+      return $this->mergeCompetitorWithResult($resultModel->getSpeedFullResult($results));
+  }
+
   public function getLeadFullResult(): array {
       $results = $this->getResult(ResultModel::LEAD_KVA);
       if (!$results) {

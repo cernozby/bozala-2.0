@@ -122,4 +122,14 @@ Class HomepagePresenter extends BasePresenter
     $this->flashMessage('Byl jste úspešně odhlášen');
     $this->redirect(':Public:Homepage:default');
   }
+
+  public function handleChangePasswd() {
+      $this->template->changePasswd = true;
+
+  }
+
+    public function handleResetPasswd() : void {
+        $this->template->forgetPasswdForm = true;
+    }
+
 }

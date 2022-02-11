@@ -24,10 +24,8 @@
                 {/if}
                 {if $comp->isSpeedComp()}
                   <th>Počet pokusů</th>
-                  <th>Systém výsledků</th>
                   <th>Finále</th>
                 {/if}
-              {else}
                 <th>propozice</th>
               {/if}
             </tr>
@@ -51,8 +49,11 @@
                   <td>{$comp->get('speed')}</td>
                   <td>{$comp->get('speed_final')|boolToWorld}</td>
                 {/if}
-              {else}
-                <td>Dodelat propozice</td>
+                  <td>
+                    {if $comp->get('propo_path') }
+                      <a href="{$comp->get('propo_path')}" target="_blank">propozice</a>
+                    {/if}
+                  </td>
               {/if}
             </tr>
           </table>

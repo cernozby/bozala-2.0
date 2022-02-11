@@ -11,6 +11,10 @@
     {include 'resultType/boulder-amateur.latte'}
 {/if}
 {if $comp->get('lead')}
-    {php $multi[] = 'lead-comp'}
+    {php $multi[] = 'lead'}
     {include 'resultType/lead.latte'}
+{/if}
+{if $comp->get('speed')}
+    {php $multi[] = 'speed'}
+    {include 'resultType/speed.latte'}
 {/if}

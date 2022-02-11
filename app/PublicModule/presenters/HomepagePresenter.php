@@ -22,7 +22,8 @@ Class HomepagePresenter extends BasePresenter {
   public function handleRegistration() : void {
     $this->template->registrationForm = true;
   }
-  
+
+
   
   
   /*=========================== forms ==================*/

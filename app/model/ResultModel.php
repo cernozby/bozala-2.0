@@ -187,6 +187,27 @@ class ResultModel extends BaseModel
         $this->addPlace($result);
         return $result;
     }
+
+    /**
+     * @param Result[] $data
+     * @return array
+     */
+    public function getSpeedFullResult(array $data): array {
+
+        foreach ($data as $item) {
+            $result[$item->get('competitor_id')] =
+                $item->getResultAsArray() +
+                ['resultColumn' => $item->getBestTime()] +
+                ['resultKey' => $item->getBestTime()];
+
+        }
+
+        uasort($result, (fn($a, $b): int => $a['resultColumn'] > $b['resultColumn'] ? 1 : -1));
+        $this->addPlace($result);
+        return $result;
+    }
+
+
     /**
      * @param string $resultType
      * @param Result[] $data

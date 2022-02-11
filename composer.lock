@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1e8d3d3c54942ba5b1f56ed117ddbb02",
+    "content-hash": "e2872b9e8576f6547bbc5f8a8ef88b41",
     "packages": [
         {
             "name": "cernozby/zkzk",
@@ -776,22 +776,22 @@
         },
         {
             "name": "nette/mail",
-            "version": "v3.1.6",
+            "version": "v3.1.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/mail.git",
-                "reference": "d5035afcb733ff76b353b8a126a1a6fd560005de"
+                "reference": "2867c6f53c3afdd75a7b57e9bc9f8b08d0580603"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/mail/zipball/d5035afcb733ff76b353b8a126a1a6fd560005de",
-                "reference": "d5035afcb733ff76b353b8a126a1a6fd560005de",
+                "url": "https://api.github.com/repos/nette/mail/zipball/2867c6f53c3afdd75a7b57e9bc9f8b08d0580603",
+                "reference": "2867c6f53c3afdd75a7b57e9bc9f8b08d0580603",
                 "shasum": ""
             },
             "require": {
                 "ext-iconv": "*",
                 "nette/utils": "^3.1",
-                "php": ">=7.1 <8.1"
+                "php": ">=7.1 <8.2"
             },
             "conflict": {
                 "nette/di": "<3.0-stable"
@@ -842,7 +842,11 @@
                 "nette",
                 "smtp"
             ],
-            "time": "2021-02-24T20:29:52+00:00"
+            "support": {
+                "issues": "https://github.com/nette/mail/issues",
+                "source": "https://github.com/nette/mail/tree/v3.1"
+            },
+            "time": "2021-12-12T17:22:11+00:00"
         },
         {
             "name": "nette/neon",
@@ -1219,27 +1223,27 @@
         },
         {
             "name": "nette/utils",
-            "version": "v3.2.2",
+            "version": "v3.2.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/utils.git",
-                "reference": "967cfc4f9a1acd5f1058d76715a424c53343c20c"
+                "reference": "32091bbafd8a543d255855bf44fc795742adaf49"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/utils/zipball/967cfc4f9a1acd5f1058d76715a424c53343c20c",
-                "reference": "967cfc4f9a1acd5f1058d76715a424c53343c20c",
+                "url": "https://api.github.com/repos/nette/utils/zipball/32091bbafd8a543d255855bf44fc795742adaf49",
+                "reference": "32091bbafd8a543d255855bf44fc795742adaf49",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.2 <8.1"
+                "php": ">=7.2 <8.2"
             },
             "conflict": {
                 "nette/di": "<3.0.6"
             },
             "require-dev": {
                 "nette/tester": "~2.0",
-                "phpstan/phpstan": "^0.12",
+                "phpstan/phpstan": "^1.0",
                 "tracy/tracy": "^2.3"
             },
             "suggest": {
@@ -1296,7 +1300,11 @@
                 "utility",
                 "validation"
             ],
-            "time": "2021-03-03T22:53:25+00:00"
+            "support": {
+                "issues": "https://github.com/nette/utils/issues",
+                "source": "https://github.com/nette/utils/tree/v3.2"
+            },
+            "time": "2022-01-28T15:10:59+00:00"
         },
         {
             "name": "php-kit/ext-pdo",
@@ -1921,14 +1929,17 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
+        "nette/mail": 20,
+        "nette/utils": 20,
         "cernozby/zkzk": 20,
         "roave/security-advisories": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">= 7.2",
-        "ext-pdo": "*"
+        "php": ">=7.4",
+        "ext-pdo": "*",
+        "ext-json": "*"
     },
     "platform-dev": [],
     "plugin-api-version": "2.0.0"

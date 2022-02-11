@@ -1,0 +1,22 @@
+{block content}
+    <a class="btn icon-btn col-3 m-3 btn-primary font-button-admin text-center"n:href="logout!">
+        <i class="fa fa-sign-out fa-4x round"></i>&nbsp; <p>odhlasit</p>
+    </a>
+    <a class="btn icon-btn col-3 m-3 btn-primary font-button-admin text-center"n:href="changePasswd!">
+        <i class="fa fa-refresh fa-4x round"></i>&nbsp; <p>Změnit heslo</p>
+    </a>
+    <a class="btn icon-btn col-3 m-3 btn-primary font-button-admin text-center"n:href="resetPasswd!">
+        <i class="fa fa-refresh fa-4x round"></i>&nbsp; <p>Resetovat heslo</p>
+    </a>
+
+
+    {if isset($changePasswd)}
+        {control formChangePasswdControl}
+    {/if}
+
+    {if isset($forgetPasswdForm)}
+        {control formForgetPasswdControl}
+    {/if}
+
+{/block}
+

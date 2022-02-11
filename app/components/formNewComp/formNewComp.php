@@ -13,6 +13,8 @@ use Nette\DI\Container;
 use Nette\Forms\Form as FormAlias;
 use Nette\Http\FileUpload;
 use Nette\Utils\ArrayHash;
+use Nette\Utils\FileSystem;
+use Nette\Utils\Random;
 
 
 class formNewComp extends BaseComponent {
@@ -74,17 +76,28 @@ class formNewComp extends BaseComponent {
   public function newCompFormSucceed(Form $form, ArrayHash $values): void {
     try {
         /** @var FileUpload $propo */
-        $propo = $values->offsetGet('propo');
-        bdump($propo->move("/www/propo/" . substr(md5(mt_rand()), 0, 7) . 'aaa.pdf'));
+      $propo = $values->offsetGet('propo');
+      if ($propo->isOk()) {
+          $name = '/pdf/' . Random::generate(10) . '-propozice.pdf';
+          $path = __DIR__ . '/../../../www/' . $name;
+          $propo->move($path);
+          $values->offsetSet('propo_path', $this->getPresenter()->template->baseUrl . $name);
 
-        $compId = $values->offsetGet('id_comp');
+      }
+
+      $compId = $values->offsetGet('id_comp');
       $values->offsetUnset('id_comp');
       $values->offsetSet('user_id', $this->userClass->getId());
       $values->offsetUnset('propo');
 
 
       if ($compId) {
-        $this->container->createService('Comp')->initId($compId)->update($values);
+        $comp = $this->container->createService('Comp')->initId($compId);
+        if ($comp->get('propo_path')) {
+            $name = array_reverse(explode('/', $comp->get('propo_path')))[0];
+            FileSystem::delete("../www/pdf/" . $name);
+        }
+        $comp->update($values);
         $this->presenter->flashMessage('Editace proběhla úspešně.');
       } else {
         $this->container->createService('CompModel')->newComp($values);

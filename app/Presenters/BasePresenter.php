@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Presenters;
+use App\components\formChangePasswd\formChangePasswd;
+use App\components\formForgetPasswd\formForgetPasswd;
 use App\components\formLogin\formLogin;
 use App\components\formNewCategory;
 use App\components\formNewCompetitor\formNewComp;
@@ -133,4 +135,12 @@ abstract class BasePresenter extends Presenter {
           return new formNewCategory($this->presenter, $this->container, $this->userClass, $arg);
       });
   }
+
+  public function createComponentFormChangePasswdControl(): FormChangePasswd {
+      return new formChangePasswd($this->presenter, $this->container, $this->userClass);
+  }
+
+    public function createComponentFormForgetPasswdControl(): formForgetPasswd {
+        return new formForgetPasswd($this->presenter, $this->container, $this->userClass);
+    }
 }

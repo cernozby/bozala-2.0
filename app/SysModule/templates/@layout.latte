@@ -61,7 +61,13 @@
 					<a class="nav-link text-white" n:href=":Sys:Homepage:default">administrace</a>
 				</li>
 				<li class="nav-item">
+{*
 					<a class="nav-link text-white" n:href="logout!">Odhlásit</a>
+*}
+					<a class="nav-link text-white" n:href=":Sys:Homepage:user">
+						<i class="fa fa-user fa-1x" ></i>
+						{$userClass->get('first_name')}
+					</a>
 				</li>
 			</ul>
 		</div>

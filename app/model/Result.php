@@ -36,6 +36,16 @@ class Result extends BaseFactory
             $this->getResultAsArray()));
     }
 
+    public function getBestTime() {
+        if ($this->get('type') !== ResultModel::SPEED_KVA) {
+            return null;
+        }
+
+        $data = $this->getResultAsArray();
+        $max = max($data);
+        return min(array_map(fn ($item) => $item == 0 ? $max + 1 : $item , $data));
+    }
+
     public function getSumBoulderTopZone() : array {
         $result['T'] = 0;
         $result['Z'] = 0;

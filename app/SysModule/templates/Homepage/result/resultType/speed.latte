@@ -1,0 +1,38 @@
+{varType App\model\Category $category}
+{varType App\model\ResultModel $resultModel}
+{var $results = $category->getSpeedFullResult(App\model\ResultModel::SPEED_KVA)}
+<div class="table-responsive" style="padding: 15px; margin-bottom: 30px">
+    <table class="table table-add-result border" style="padding: 15px !important;">
+        <tr>
+            <th colspan="{5 + ($category->getComp()->get('speed')) }">
+                <h2>Rychlost kvalifikace - {$category->getName()}</h2>
+            </th>
+        </tr>
+        <tr>
+            <th>Pořadí</th>
+            <th>Jméno</th>
+            <th>Oddil</th>
+            <th>Rok narození</th>
+
+            {for $i = 1; $i <= $category->getComp()->get('speed'); $i++}
+                <th>pokus&nbsp;{$i}</th>
+            {/for}
+            <th>Nejlepsi pokus</th>
+        </tr>
+        {foreach $results as $row}
+            {varType \App\model\Competitor $competitor}
+            {var $competitor = $row['competitor']}
+            <tr>
+                <td>{$results[$competitor->getId()]['place']}</td>
+                <td>{$competitor->getFullName()}</td>
+                <td>{$competitor->get('club')}</td>
+                <td>{$competitor->get('year')}</td>
+
+                {for $i = 1; $i <= $category->getComp()->get('speed'); $i++}
+                    <td>{$results[$competitor->getId()]['route-'.$i]|fillEmptyStr|stripHtml}</td>
+                {/for}
+                <td>{$results[$competitor->getId()]['resultKey']}</td>
+            </tr>
+        {/foreach}
+    </table>
+</div>

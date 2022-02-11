@@ -13,7 +13,7 @@ use Nette\Utils\ArrayHash;
 
 
 class formLogin extends BaseComponent {
-  
+
   public function render() : void {
     $this->template->setFile(__DIR__ . '/formLogin.latte');
     $this->template->render();
