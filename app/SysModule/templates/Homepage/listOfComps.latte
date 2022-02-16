@@ -14,13 +14,18 @@
                 <th>Viditelná předregistrace</th>
                 {if $comp->isLeadComp()}
                   <th>Počet cest</th>
-                  <th>Systém výsledků</th>
                   <th>Finále</th>
+                  {if $comp->get('lead_final_competitors')}
+                    <th>zavodniku ve F.</th>
+                  {/if}
                 {/if}
                 {if $comp->isBoulderComp()}
                   <th>Počet bouldrů</th>
                   <th>Systém výsledků</th>
                   <th>Finále</th>
+                  {if $comp->get('boulder_final_competitors')}
+                    <th>zavodniku ve F.</th>
+                  {/if}
                 {/if}
                 {if $comp->isSpeedComp()}
                   <th>Počet pokusů</th>
@@ -37,13 +42,18 @@
                 <td>{$comp->get('visible_prereg')|boolToWorld}</td>
                 {if $comp->isLeadComp()}
                   <td>{$comp->get('lead')}</td>
-                  <td>{$comp->get('lead_result')|resultType}</td>
                   <td>{$comp->get('lead_final')|boolToWorld}</td>
+                  {if $comp->get('lead_final_competitors')}
+                    <td>{$comp->get('lead_final_competitors')}</td>
+                  {/if}
                 {/if}
                 {if $comp->isBoulderComp()}
                   <td>{$comp->get('boulder')}</td>
                   <td>{$comp->get('boulder_result')|resultType}</td>
                   <td>{$comp->get('boulder_final')|boolToWorld}</td>
+                  {if $comp->get('boulder_final_competitors')}
+                    <td>{$comp->get('boulder_final_competitors')}</td>
+                  {/if}
                 {/if}
                 {if $comp->isSpeedComp()}
                   <td>{$comp->get('speed')}</td>

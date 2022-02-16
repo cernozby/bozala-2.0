@@ -69,6 +69,26 @@ class Result extends BaseFactory
     }
 
     /**
+     * @param string $type
+     * @param int $competitorId
+     * @param int $categoryId
+     * @return Result|null
+     */
+    public function initByTypeCompetitorIdCategoryId(string $type, int $competitorId, int $categoryId) : ?object {
+        $result = $this->getTable()
+            ->select('*')
+            ->where('type = ?', $type)
+            ->where('competitor_id = ?', $competitorId)
+            ->where('category_id = ?', $categoryId)
+            ->fetch();
+
+        if (!$result) {
+            return null;
+        }
+        return $this->initId($result->id_result);
+    }
+
+    /**
      * @param $type
      * @param $competitorId
      * @return Result|null

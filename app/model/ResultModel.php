@@ -39,6 +39,12 @@ class ResultModel extends BaseModel
         parent::__construct($database, $container, $linkGenerator);
     }
 
+    public function deleteByType($type, $categoryId) : void {
+        $this->getTable()->select('*')
+            ->where('type = ?', $type)
+            ->where('category_id = ?', $categoryId)
+            ->delete();
+    }
 
     public function saveResult(array $data) {
         $idCategory = $data['idCategory'];
@@ -81,6 +87,19 @@ class ResultModel extends BaseModel
             ->where('category_id = ?', $categoryId)
             ->where('type = ?', $type)
             ->fetchAll());
+    }
+
+
+    /**
+     * @param int $categoryId
+     * @return Result[]
+     */
+    public function getAllResultToCategory(int $categoryId) : array {
+        return
+            $this->arrayToObject(
+                $this->getTable()->select('*')
+                    ->where('category_id = ?', $categoryId)
+                    ->fetchAll());
     }
 
     /**
@@ -158,12 +177,11 @@ class ResultModel extends BaseModel
         return $data;
     }
 
-
     /**
      * @param Result[] $data
      * @return array
      */
-    public function getLeadFullResult(array $data) {
+    public function getLeadResult(array $data) {
         $result = array();
         $helpArray = array();
 
@@ -171,7 +189,6 @@ class ResultModel extends BaseModel
             $helpArray[$item->getCompetitorId()] = $item->getResultAsArray();
         }
         $helpArray = $this->leadRoutePlace($helpArray);
-
         $resultForAllRoute = $this->leadRoutePlaceForAll($helpArray);
 
 
@@ -247,7 +264,7 @@ class ResultModel extends BaseModel
         }
 
         //serazeni podle vysledku pro profi boulder
-        usort($result, cmpOrderBoulderCompResult('resultColumn'));
+        usort($result, $this->cmpOrderBoulderCompResult());
 
 
         $newResult = array();
@@ -305,25 +322,95 @@ class ResultModel extends BaseModel
         }
         return $result;
     }
-}
 
-
-function cmpOrderBoulderCompResult($key) {
-    return function ($a, $b) use ($key) {
-        if ($a[$key]['T'] == $b[$key]['T']) {
-            if ($a[$key]['Z'] == $b[$key]['Z']) {
-                if ($a[$key]['PT'] == $b[$key]['PT']) {
-                    if ($a[$key]['PZ'] == $b[$key]['PZ']) {
-                        return 0;
-                    }
-                    return $a[$key]['PZ'] < $b[$key]['PZ'] ? 1 : -1;
-                }
-                return $a[$key]['PT'] > $b[$key]['PT'] ? 1 : -1;
-            }
-            return $a[$key]['Z'] < $b[$key]['Z'] ? 1 : -1;
+    public function getCompetitors(int $categoryId, string $type): array {
+        $return = [];
+        $result = $this->getTable()->select('*')
+            ->where('category_id = ?', $categoryId )
+            ->where('type = ?', $type)
+            ->fetchAll();
+        foreach ($result as $item) {
+            $return[$item['competitor_id']] = $this->container->createService('Competitor')->initId($item['competitor_id']);
         }
-        return $a[$key]['T'] < $b[$key]['T'] ? 1 : -1;
-    };
+
+        return $return;
+    }
+
+    private function cmpFunctionLead(): \Closure {
+        return function ($a, $b) {
+                if ($a['resultKeyFinal'] == $b['resultKeyFinal']) {
+                    return $a['resultKey'] < $b['resultKey'] ? -1 : 1;
+                }
+                return $a['resultKeyFinal'] < $b['resultKeyFinal'] ? -1 : 1;
+        };
+    }
+
+    private function groupByTwoKeys(array $result): array {
+        $helpArray = [];
+        foreach ($result as $key => $item) {
+            if (isset($helpArray[$item['resultKey'] . $item['resultKeyFinal']])) {
+                array_push($helpArray[$item['resultKey'] . $item['resultKeyFinal']], $key);
+            } else {
+                $helpArray[$item['resultKey'] . $item['resultKeyFinal']] = array($key);
+            }
+        }
+
+        return $helpArray;
+    }
+
+    private function addPlaceFullLead(array &$result, array $helpArray) {
+        $index = 1;
+        foreach ($helpArray as $item) {
+            $samePlace = count($item);
+            $place = ($index + ($index + $samePlace - 1)) / 2;
+            foreach ($item as $key) {
+                $result[$key]['place'] = $place;
+                $index++;
+            }
+        }
+    }
+
+    public function getFullLeadResult(int $categoryId)  :array {
+        $kval = $this->getLeadResult($this->getResult(self::LEAD_KVA, $categoryId));
+        $final = $this->getLeadResult($this->getResult(self::LEAD_FI, $categoryId));
+
+        foreach ($kval as $key => $item) {
+            $kval[$key]['resultKeyFinal'] = 9999;
+        }
+
+        foreach ($final as $key => $item) {
+            $kval[$key]['final'] = $item['route-1'];
+            $kval[$key]['resultKeyFinal'] = $item['resultKey'];
+        }
+
+        $result = $kval;
+        uasort($result, $this->cmpFunctionLead());
+
+        $this->addPlaceFullLead($result, $this->groupByTwoKeys($result));
+        return $result;
+    }
+
+    private function cmpOrderBoulderCompResult(): \Closure {
+        $key = 'resultColumn';
+        return function ($a, $b) use ($key) {
+            if ($a[$key]['T'] == $b[$key]['T']) {
+                if ($a[$key]['Z'] == $b[$key]['Z']) {
+                    if ($a[$key]['PT'] == $b[$key]['PT']) {
+                        if ($a[$key]['PZ'] == $b[$key]['PZ']) {
+                            return 0;
+                        }
+                        return $a[$key]['PZ'] < $b[$key]['PZ'] ? 1 : -1;
+                    }
+                    return $a[$key]['PT'] > $b[$key]['PT'] ? 1 : -1;
+                }
+                return $a[$key]['Z'] < $b[$key]['Z'] ? 1 : -1;
+            }
+            return $a[$key]['T'] < $b[$key]['T'] ? 1 : -1;
+        };
+    }
 }
+
+
+
 
 

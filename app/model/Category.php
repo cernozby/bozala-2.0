@@ -14,7 +14,11 @@ use Nette\Security\User;
  **/
 class Category extends BaseFactory
 {
-  
+    /** @var ResultModel $resultModel */
+    private $resultModel;
+
+    /** @var Result $result */
+    private $result;
   
   /**
    * Category constructor.
@@ -23,8 +27,19 @@ class Category extends BaseFactory
    * @param LinkGenerator $linkGenerator
    */
   public function __construct(Explorer $database, Container $container, LinkGenerator $linkGenerator) {
-    $this->table = 'category';
-    parent::__construct($database, $container, $linkGenerator);
+      $this->table = 'category';
+      parent::__construct($database, $container, $linkGenerator);
+
+      $this->resultModel = $this->container->createService('resultModel');
+      $this->result = $this->container->createService('result');
+  }
+
+
+  public function delete(): void {
+      foreach ($this->resultModel->getAllResultToCategory($this->getId()) as $result) {
+          $result->delete();
+      }
+      parent::delete();
   }
 
 
@@ -87,9 +102,7 @@ class Category extends BaseFactory
   }
 
   public function getPointsForBoulder() {
-      /** @var ResultModel $resultModel */
-      $resultModel = $this->container->createService('resultModel');
-      return $resultModel->getBoulderValueAmateurResult($this->getResult('boulder_kva'));
+      return $this->resultModel->getBoulderValueAmateurResult($this->getResult('boulder_kva'));
   }
 
     /**
@@ -99,9 +112,7 @@ class Category extends BaseFactory
      * @return array
      */
   public function getResult(string $type): array {
-      /** @var ResultModel $resultModel */
-      $resultModel = $this->container->createService('resultModel');
-      return $resultModel->getResult($type, $this->getId());
+      return $this->resultModel->getResult($type, $this->getId());
   }
 
   public function getSpeedFullResult() : array {
@@ -109,24 +120,47 @@ class Category extends BaseFactory
       if (!$results) {
           return array();
       }
-      /** @var ResultModel $resultModel */
-      $resultModel = $this->container->createService('resultModel');
 
-      return $this->mergeCompetitorWithResult($resultModel->getSpeedFullResult($results));
+      return $this->mergeCompetitorWithResult($this->resultModel->getSpeedFullResult($results));
   }
 
-  public function getLeadFullResult(): array {
-      $results = $this->getResult(ResultModel::LEAD_KVA);
-      if (!$results) {
-          return array();
+
+  public function makeFinalListLead() : void {
+      $this->makeFinalList(ResultModel::LEAD_FI, $this->getComp()->getCountCompetitorsLeadFinal(), $this->getLeadResult(ResultModel::LEAD_KVA));
+  }
+
+  private function writeCompetitorToFinalList($idCompetitor, $type) {
+          $this->getTable('result')
+              ->insert(['category_id' => $this->getId(),
+                        'competitor_id' => $idCompetitor,
+                        'type' => $type]);
+
+  }
+
+    /**
+     * @param string $finalType
+     * @param int $competitors
+     * @param array $results
+     */
+  private function makeFinalList(string $finalType, int $competitors, array $results) : void {
+      $lastPlace = -1;
+
+      $this->resultModel->deleteByType($finalType, $this->getId());
+
+      foreach ($results as $idCompetitor => $result) {
+          if ($competitors < 1 && $lastPlace != $result['place']) {
+              break;
+          }
+
+          $this->writeCompetitorToFinalList($idCompetitor, $finalType);
+          $competitors -= 1;
+          $lastPlace = $result['place'];
       }
-
-      /** @var ResultModel $resultModel */
-      $resultModel = $this->container->createService('resultModel');
-
-      return $this->mergeCompetitorWithResult($resultModel->getLeadFullResult($results));
+  }
 
 
+  public function getLeadResult(): array {
+      return $this->mergeCompetitorWithResult($this->resultModel->getFullLeadResult($this->getId()));
   }
 
     /**
@@ -146,15 +180,11 @@ class Category extends BaseFactory
           return array();
       }
 
-      /** @var ResultModel $resultModel */
-      $resultModel = $this->container->createService('resultModel');
-
-
       switch ($resultType) {
           case CompModel::AMATEUR_RESULT:
-              return $this->mergeCompetitorWithResult($resultModel->getBoulderFullResultAmateurSystem($resultType, $results));
+              return $this->mergeCompetitorWithResult($this->resultModel->getBoulderFullResultAmateurSystem($resultType, $results));
           case CompModel::COMP_RESULT:
-              return $this->mergeCompetitorWithResult($resultModel->getBoulderFullResultCompSystem($resultType, $results));
+              return $this->mergeCompetitorWithResult($this->resultModel->getBoulderFullResultCompSystem($resultType, $results));
           default:
               throw new \InvalidArgumentException("Wrong result system");
       }

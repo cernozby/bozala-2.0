@@ -45,16 +45,21 @@ class formNewComp extends BaseComponent {
     $form->addInteger('speed', "Počet pokusů: ");
     $form->addInteger('lead', "Počet cest: ");
     $form->addSelect('boulder_final', "Finále?: ", array(0 => 'Ne', 1 => 'Ano'))
-      ->setPrompt('--vyberte-- ');
-    $form->addSelect('speed_final', "Finále?: ", array(0 => 'Ne', 1 => 'Ano'))
-      ->setPrompt('--vyberte-- ');
-    $form->addSelect('lead_final', "Finále?: ", array(0 => 'Ne', 1 => 'Ano'))
-      ->setPrompt('--vyberte-- ');
+      ->setDefaultValue(0);
+    $form->addSelect('speed_final', "Finále: ", array(0 => 'Ne', 1 => 'Ano'))
+        ->setDefaultValue(0);
+    $form->addSelect('lead_final', "Finále: ", array(0 => 'Ne', 1 => 'Ano'))
+        ->setDefaultValue(0);
     $form->addSelect('boulder_result', "Typ výsledků: ", CompModel::$result_type)
-      ->setPrompt('--vyberte-- ');
-    $form->addSelect('lead_result', "Typ výsledků: ", CompModel::$result_type)
-      ->setPrompt('--vyberte-- ');
+        ->setDefaultValue(CompModel::AMATEUR_RESULT);
+
+    $form->addInteger("boulder_final_competitors", 'Závodníků ve finále:');
+    $form->addInteger("lead_final_competitors", 'Závodníků ve finále:');
     $form->addUpload('propo', 'Propozice: ');
+
+    $form->addCheckbox("isLead")->setOmitted();
+    $form->addCheckbox("isBoulder")->setOmitted();
+    $form->addCheckbox("isSpeed")->setOmitted();
 
     if ($this->compId) {
       $data = $this->container->createService('Comp')->initId($this->compId)->getRowAsArray();

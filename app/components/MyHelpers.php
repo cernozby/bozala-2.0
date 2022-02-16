@@ -66,7 +66,7 @@ class MyHelpers {
 
 
     private static function isEmpty($variable): bool {
-        return $variable === " " or $variable === "" or $variable == 0;
+        return $variable === " " or $variable === "" or $variable === '0';
     }
 }
 ?>

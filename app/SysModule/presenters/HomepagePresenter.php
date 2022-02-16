@@ -26,6 +26,11 @@ Class HomepagePresenter extends BasePresenter
 
   }
 
+  public function handleMakeFinalList($idCategory, $type) {
+      $this->category->initId($idCategory);
+      $this->category->makeFinalListLead();
+  }
+
   public function handleChangeBoolCategory(int $categoryId, string $column) {
       $this->category->initId($categoryId);
       $this->category->changeBoolColumn($column);
@@ -82,6 +87,7 @@ Class HomepagePresenter extends BasePresenter
           $this->template->competitors = $this->userClass->isAdmin() ?
               $this->category->getPreregCompetitors() :
               $this->category->getPreregCompetitorsByUser($this->userClass->getId());
+          $this->template->finalLeadCompetitors = $this->resultModel->getCompetitors($categoryId, ResultModel::LEAD_FI);
 
       } elseif ($compId) {
           $this->comp->initId($compId);

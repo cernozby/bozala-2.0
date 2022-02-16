@@ -30,6 +30,10 @@ class Comp extends BaseFactory
           $name = array_reverse(explode('/', $this->get('propo_path')))[0];
           FileSystem::delete("../www/pdf/" . $name);
       }
+
+      foreach ($this->getCategory() as $category) {
+          $category->delete();
+      }
       parent::delete();
 
   }
@@ -83,6 +87,14 @@ class Comp extends BaseFactory
   public function isOpenPrereg() : bool {
       return boolval($this->get('online_registration'));
   }
+
+  public function getCountCompetitorsLeadFinal() {
+      return $this->get('lead_final_competitors');
+  }
+
+    public function getCountCompetitorsBoulderFinal() {
+        return $this->get('boulder_final_competitors');
+    }
 
   public function getBoulderResultType() : string {
       return $this->get('boulder_result');

@@ -136,3 +136,8 @@ INSERT INTO `user_role` (`id_user_role`, `role`) VALUES
 (1,	'admin');
 
 -- 2021-02-25 13:01:17
+
+ALTER TABLE `comp`
+    ADD `boulder_final_competitors` int(10) NULL AFTER `boulder_final`,
+ADD `lead_final_competitors` int(10) NULL AFTER `lead_final`,
+CHANGE `last_mod` `last_mod` timestamp NULL DEFAULT current_timestamp() ON UPDATE CURRENT_TIMESTAMP AFTER `created`;

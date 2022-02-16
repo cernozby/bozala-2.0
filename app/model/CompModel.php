@@ -63,15 +63,24 @@ class CompModel extends BaseModel
     if ($data->offsetGet('boulder') === '') {
       $data->offsetUnset('boulder_final');
       $data->offsetUnset('boulder_result');
+      $data->offsetUnset('boulder_final_competitors');
     }
   
     if ($data->offsetGet('lead') === '') {
       $data->offsetUnset('lead_final');
-      $data->offsetUnset('lead_result');
+      $data->offsetUnset('lead_final_competitors');
     }
   
     if ($data->offsetGet('speed') === '') {
       $data->offsetUnset('speed_final');
+    }
+
+    if ($data->offsetGet('boulder_final') != 1) {
+        $data->offsetUnset('boulder_final_competitors');
+    }
+
+    if ($data->offsetGet('lead_final') != 1) {
+        $data->offsetUnset('lead_final_competitors');
     }
     
     foreach ($data as $key => $value) {
