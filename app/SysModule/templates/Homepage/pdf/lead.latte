@@ -1,0 +1,46 @@
+{varType App\model\Comp $comp}
+{varType App\model\Category $category}
+
+<table>
+    <tr>
+        <td colspan="{5 + ($routeCountKva * 2) + $routeCountFi }" style="text-align: center" class="headline-table">
+            <strong>Obtížnost - {$category->getName()}<strong>
+        </td>
+    </tr>
+    <tr>
+        <td class="width-50"><strong>Pořadí</strong></td>
+        <td class="width-150"><strong>Jméno</strong></td>
+        <td class="width-150"><strong>Oddíl</strong></td>
+        <td class="width-150"><strong>Rok narození</strong></td>
+        {for $i = 1; $i <= $routeCountKva; $i++}
+            <td class="width-50">cesta&nbsp;{$i}</td>
+            <td class="width-30">Q{$i}</td>
+        {/for}
+        <td class="width-30">Qn</td>
+
+        {if $routeCountFi}
+            <td class="width-50">finále</td>
+        {/if}
+    </tr>
+    {foreach $results as $row}
+        {varType \App\model\Competitor $competitor}
+        {var $competitor = $row['competitor']}
+
+        <tr><td>{$row['place']}.</td>
+            <td>{$competitor->getFullName()}</td>
+            <td>{$competitor->get('club')}</td>
+            <td>{$competitor->get('year')}</td>
+
+            {for $i = 1; $i <= $routeCountKva; $i++}
+                <td>{$results[$competitor->getId()]['route-'.$i]|fillEmptyStr|stripHtml}</td>
+                <td>{$results[$competitor->getId()]['route-'.$i.'-q']}</td>
+            {/for}
+            <td>{$results[$competitor->getId()]['resultKey']}</td>
+            {if isset($results[$competitor->getId()]['final']) }
+                <td> {$results[$competitor->getId()]['final']} </td>
+            {/if}
+        </tr>
+    {/foreach}
+</table>
+
+<p style="text-align: left">Tisk: {date('m.d.Y H:i:s', time())}</p>

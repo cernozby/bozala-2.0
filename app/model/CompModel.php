@@ -1,7 +1,6 @@
 <?php
 
 namespace App\model;
-use Exception;
 use Nette\Application\LinkGenerator;
 use Nette\Database\Explorer;
 use Nette\DI\Container;
@@ -40,7 +39,7 @@ class CompModel extends BaseModel
       return $this->arrayToObject($this->getTable()->select('*')->where('editable_result = ?', 1)->fetchAll());
   }
 
-  public function getEditableResultForUser($idUser) {
+  public function getEditableResultForUser($idUser): array {
       $obj = [];
       $pole = $this->db->query("SELECT cmp.* FROM comp cmp 
                                     JOIN category cat ON cmp.id_comp = cat.comp_id

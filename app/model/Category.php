@@ -101,8 +101,15 @@ class Category extends BaseFactory
       return $this->get('visible_result') == 1;
   }
 
-  public function getPointsForBoulder() {
-      return $this->resultModel->getBoulderValueAmateurResult($this->getResult('boulder_kva'));
+    /**
+     * @return string
+     */
+    public function getCategoryName() {
+        return $this->getName() .' (' . $this->get('year_young') . ' - ' . $this->get('year_old') . ')';
+    }
+
+  public function getPointsForBoulder(string $type) {
+      return $this->resultModel->getBoulderValueAmateurResult($this->getResult($type));
   }
 
     /**
@@ -126,7 +133,12 @@ class Category extends BaseFactory
 
 
   public function makeFinalListLead() : void {
-      $this->makeFinalList(ResultModel::LEAD_FI, $this->getComp()->getCountCompetitorsLeadFinal(), $this->getLeadResult(ResultModel::LEAD_KVA));
+      $this->makeFinalList(ResultModel::LEAD_FI, $this->getComp()->getCountCompetitorsLeadFinal(), $this->getLeadResult());
+  }
+
+  public function makeFinalListBoulder(): void {
+      $this->makeFinalList(ResultModel::BOULDER_FI, $this->getComp()->getCountCompetitorsBoulderFinal(), $this->getBoulderFullResult(ResultModel::BOULDER_KVA));
+
   }
 
   private function writeCompetitorToFinalList($idCompetitor, $type) {
@@ -175,16 +187,23 @@ class Category extends BaseFactory
      */
   public function getBoulderFullResult(string $roundType): array {
       $resultType = $this->getComp()->get('boulder_result');
-      $results = $this->getResult('boulder_kva');
-      if (!$results) {
+      $resultsKva = $this->getResult(ResultModel::BOULDER_KVA);
+      $resultsFi = $this->getResult(ResultModel::BOULDER_FI);
+
+      if (!$resultsKva) {
           return array();
+      }
+
+
+      if ($roundType == ResultModel::BOULDER_FI) {
+          return $this->mergeCompetitorWithResult($this->resultModel->getBoulderFinResult($resultsKva, $resultsFi, $resultType));
       }
 
       switch ($resultType) {
           case CompModel::AMATEUR_RESULT:
-              return $this->mergeCompetitorWithResult($this->resultModel->getBoulderFullResultAmateurSystem($resultType, $results));
+              return $this->mergeCompetitorWithResult($this->resultModel->getBoulderKvalResultAmateurSystem($resultsKva));
           case CompModel::COMP_RESULT:
-              return $this->mergeCompetitorWithResult($this->resultModel->getBoulderFullResultCompSystem($resultType, $results));
+              return $this->mergeCompetitorWithResult($this->resultModel->getBoulderKvalResultCompSystem($resultsKva));
           default:
               throw new \InvalidArgumentException("Wrong result system");
       }
@@ -206,11 +225,6 @@ class Category extends BaseFactory
       return $result;
   }
 
-    /**
-     * @return string
-     */
-    public function getCategoryName() {
-     return $this->getName() .' (' . $this->get('year_young') . ' - ' . $this->get('year_old') . ')';
-  }
+
   
 }

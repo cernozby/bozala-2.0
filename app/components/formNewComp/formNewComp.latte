@@ -32,6 +32,8 @@
             <div class="{$classBoulder} boulder_final col-md-8 form-group pb-3">{input boulder_final class => 'form-control boulder_final_input'}</div>
             <div class="{$classBoulder} boulder_final_competitors col-md-4 form-group pt-2 font-weight-bold">{label boulder_final_competitors /}</div>
             <div class="{$classBoulder} boulder_final_competitors col-md-8 form-group pb-3">{input boulder_final_competitors class => 'form-control'}</div>
+            <div class="{$classBoulder} boulder_final_boulders col-md-4 form-group pt-2 font-weight-bold">{label boulder_final_boulders /}</div>
+            <div class="{$classBoulder} boulder_final_boulders col-md-8 form-group pb-3">{input boulder_final_boulders class => 'form-control'}</div>
             <div class="{$classBoulder} boulder_result col-md-4 form-group pt-2 font-weight-bold">{label boulder_result /}</div>
             <div class="{$classBoulder} boulder_result col-md-8 form-group pb-3">{input boulder_result class => 'form-control'}</div>
 
@@ -80,8 +82,10 @@
         $(".boulder_final_input").on("change", function () {
             if (this.value == 1) {
                 $(".boulder_final_competitors").show("slow");
+                $(".boulder_final_boulders").show("slow");
             } else {
                 $(".boulder_final_competitors").hide("slow");
+                $(".boulder_final_boulders").hide("slow");
             }
         });
 

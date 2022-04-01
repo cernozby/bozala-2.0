@@ -14,24 +14,24 @@ class BaseModel {
    *
    * @var Explorer @inject
    */
-  public $db;
+  public Explorer $db;
   
   /**
    *
    * @var Container
    */
-  public $container;
+  public Container $container;
   
   /**
    *
    * @var LinkGenerator
    */
-  public $linkGenerator;
+  public LinkGenerator $linkGenerator;
   
   /**
-   * @var
+   * @var string
    */
-  public $table;
+  public string $table;
   
   
   /**
@@ -46,24 +46,7 @@ class BaseModel {
     $this->container = $container;
     $this->linkGenerator = $linkGenerator;
   }
-  
-  
-  /**
-   * @param $typeOfEmail
-   * @param $params
-   * @param $toEmail
-   * @param $subject
-   * @param null $attachments
-   * @param null $subjectPrefix
-   * @param null $attachmentsNames
-   * @return mixed
-   */
-  public function sendMail($typeOfEmail, $params, $toEmail, $subject, $attachments = null, $subjectPrefix = null, $attachmentsNames = null) {
-    if ($subjectPrefix) {
-      $subject = sprintf('[%s] %s', $subjectPrefix, $subject);
-    }
-    return $this->container->createInstance('MailModel')->sendEmail($typeOfEmail, $params, $toEmail, $subject, $attachments, null, $attachmentsNames);
-  }
+
   
   /**
    * Get name of object table
@@ -133,7 +116,7 @@ class BaseModel {
    * @return bool
    */
   public function existInColumn(string $column, string $value) : bool {
-    return $this->db->table($this->table)->where($column.' = ?', $value)->fetch() ? true : false;
+    return (bool)$this->db->table($this->table)->where($column . ' = ?', $value)->fetch();
   }
   
   public function getAllOrder($column) : array {

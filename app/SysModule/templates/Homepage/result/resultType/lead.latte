@@ -44,5 +44,9 @@
             </tr>
         {/foreach}
     </table>
-
+    {if $userClass->isAdmin()}
+        <a class="btn btn-primary col-3 m-3"
+                n:href="generatePdfCategory! idCategory => $category->getId(), latteFilename => 'lead'"
+           target="_blank">Výsledky pdf</a>
+    {/if}
 </div>

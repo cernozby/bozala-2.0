@@ -224,13 +224,47 @@ class ResultModel extends BaseModel
         return $result;
     }
 
+    private function cmpBoulderFinAmateurResult(): \Closure {
+        return function ($a, $b) {
+            if ($a['resultColumn'] == $b['resultColumn']) {
+                return $a['resultColumnKva'] > $b['resultColumnKva'] ? -1 : 1;
+            }
+            return $a['resultColumn'] > $b['resultColumn'] ? -1 : 1;
+        };
+    }
 
     /**
-     * @param string $resultType
      * @param Result[] $data
      * @return array
      */
-    public function getBoulderFullResultAmateurSystem(string $resultType, array $data): array {
+    public function getBoulderFinResult(array $dataKva, array $dataFi, string $resultType): array {
+        $resultKva = $resultType == self::BOULDER_RESULT_AMATEUR ?
+            $this->getBoulderKvalResultAmateurSystem($dataKva):
+            $this->getBoulderKvalResultCompSystem($dataKva);
+
+
+        $resultFi = $resultType == self::BOULDER_RESULT_AMATEUR ?
+            $this->getBoulderKvalResultAmateurSystem($dataFi):
+            $this->getBoulderKvalResultCompSystem($dataFi);
+
+
+        foreach ($resultFi as $key => $item) {
+            $resultFi[$key]['resultColumnKva'] = $resultKva[$key]['resultColumn'];
+            $resultFi[$key]['resultKeyKva'] = $resultKva[$key]['resultKey'];
+        }
+
+        uasort($resultFi, $this->cmpBoulderFinAmateurResult());
+        $this->addPlaceFullLead($resultFi, $this->groupByTwoKeys($resultFi, 'resultKey', 'resultKeyKva'));
+
+        return $resultFi;
+    }
+
+
+    /**
+     * @param Result[] $data
+     * @return array
+     */
+    public function getBoulderKvalResultAmateurSystem(array $data): array {
         $result = array();
 
         $boulderValue = $this->getBoulderValueAmateurResult($data);
@@ -257,14 +291,14 @@ class ResultModel extends BaseModel
      * @param Result[] $data
      * @return array
      */
-    public function getBoulderFullResultCompSystem(string $resultType, array $data): array {
+    public function getBoulderKvalResultCompSystem(array $data): array {
         $result = array();
         foreach ($data as $item) {
             $result[] = ['result' => $item, 'resultColumn' => $item->getSumBoulderTopZone()];
         }
 
         //serazeni podle vysledku pro profi boulder
-        usort($result, $this->cmpOrderBoulderCompResult());
+        uasort($result, $this->cmpOrderBoulderCompResult());
 
 
         $newResult = array();
@@ -280,7 +314,6 @@ class ResultModel extends BaseModel
 
         $this->addPlace($newResult);
         return $newResult;
-
     }
 
     public function addPlace(&$data) {
@@ -345,13 +378,13 @@ class ResultModel extends BaseModel
         };
     }
 
-    private function groupByTwoKeys(array $result): array {
+    private function groupByTwoKeys(array $result, string $key1, string $key2): array {
         $helpArray = [];
         foreach ($result as $key => $item) {
-            if (isset($helpArray[$item['resultKey'] . $item['resultKeyFinal']])) {
-                array_push($helpArray[$item['resultKey'] . $item['resultKeyFinal']], $key);
+            if (isset($helpArray[$item[$key1] . $item[$key2]])) {
+                array_push($helpArray[$item[$key1] . $item[$key2]], $key);
             } else {
-                $helpArray[$item['resultKey'] . $item['resultKeyFinal']] = array($key);
+                $helpArray[$item[$key1] . $item[$key2]] = array($key);
             }
         }
 
@@ -386,7 +419,7 @@ class ResultModel extends BaseModel
         $result = $kval;
         uasort($result, $this->cmpFunctionLead());
 
-        $this->addPlaceFullLead($result, $this->groupByTwoKeys($result));
+        $this->addPlaceFullLead($result, $this->groupByTwoKeys($result, 'resultKey', 'resultKeyFinal'));
         return $result;
     }
 

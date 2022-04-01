@@ -24,7 +24,8 @@
 		"ext-pdo": "*",
 		"twbs/bootstrap": "4.6.0",
 		"cernozby/zkzk": "dev-master",
-      "ext-json": "*"
+      "ext-json": "*",
+		"mpdf/mpdf": "dev-development"
     },
 	"require-dev": {
 		"roave/security-advisories": "dev-master"

@@ -1,11 +1,11 @@
 {varType App\model\Category $category}
-{var $results = $category->getBoulderFullResult(App\model\ResultModel::BOULDER_KVA)}
+{var $results = $category->getBoulderFullResult(App\model\ResultModel::BOULDER_FI)}
 
 <div class="table-responsive" style="padding: 15px; margin-bottom: 30px">
     <table class="table table-add-result border" style="padding: 15px !important;">
         <tr>
-            <th colspan="{5 + ($category->getComp()->get('boulder') * 2 )}">
-                <h2>Boulder {if $category->getComp()->get('boulder_final')}kvalifikace {/if}- {$category->getName()}</h2>
+            <th colspan="{6 + ($category->getComp()->get('boulder_final_boulders') * 2 )}">
+                <h2>Boulder finále - {$category->getName()}</h2>
             </th>
         </tr>
         <tr>
@@ -13,9 +13,9 @@
             <th>Jméno</th>
             <th>Oddil</th>
             <th>Rok narození</th>
+            <th>Kvalifikace</th>
 
-            {for $i = 1; $i <= $category->getComp()->get('boulder'); $i++}
-
+            {for $i = 1; $i <= $category->getComp()->get('boulder_final_boulders'); $i++}
                 <th>B{$i}Z</th>
                 <th>B{$i}T</th>
             {/for}
@@ -24,24 +24,26 @@
         {foreach $results as $row}
             {varType \App\model\Competitor $competitor}
             {var $competitor = $row['competitor']}
-            {var $resultSum = $row['resultColumn']}
+            {var $resultSumKva = 't' . $row['resultColumnKva']['T'] . 'z' . $row['resultColumnKva']['Z'] . ' pt' . $row['resultColumnKva']['PT'] . 'pz' . $row['resultColumnKva']['PZ']}
+            {var $resultSumFi = 't' . $row['resultColumn']['T'] . 'z' . $row['resultColumn']['Z'] . ' pt' . $row['resultColumn']['PT'] . 'pz' . $row['resultColumn']['PZ']}
 
             <tr><td>{$row['place']}.</td>
                 <td>{$competitor->getFullName()}</td>
                 <td>{$competitor->get('club')}</td>
                 <td>{$competitor->get('year')}</td>
+                <td>{$resultSumKva}</td>
 
-                {for $i = 1; $i <= $category->getComp()->get('boulder'); $i++}
+                {for $i = 1; $i <= $category->getComp()->get('boulder_final_boulders'); $i++}
                     <td>{$row['b-'. $i .'-z']|fillEmptyStr|stripHtml}</td>
                     <td>{$row['b-'. $i .'-t']|fillEmptyStr|stripHtml}</td>
                 {/for}
-                <td>t{$resultSum['T']}z{$resultSum['Z']}&nbsp;pt{$resultSum['PT']}pz{$resultSum['PZ']}</td>
+                <td>{$resultSumFi}</td>
             </tr>
         {/foreach}
     </table>
     {if $userClass->isAdmin()}
         <a class="btn btn-primary col-3 m-3"
-                n:href="generatePdfCategory! idCategory => $category->getId(), latteFilename => 'boulder-comp'"
+                n:href="generatePdfCategory! idCategory => $category->getId(), latteFilename => 'boulder-comp-final'"
            target="_blank">Výsledky pdf</a>
     {/if}
 </div>

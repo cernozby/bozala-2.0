@@ -1,0 +1,44 @@
+{varType App\model\Comp $comp}
+{varType App\model\Category $category}
+
+<table>
+    <tr>
+        <td colspan="{6 + ($boulderCount * 2 )}" style="text-align: center" class="headline-table">
+            <strong>Boulder finále - {$category->getName()}<strong>
+        </td>
+    </tr>
+    <tr>
+        <td class="width-50"><strong>Pořadí</strong></td>
+        <td class="width-150"><strong>Jméno</strong></td>
+        <td class="width-150"><strong>Oddíl</strong></td>
+        <td class="width-100"><strong>Rok narození</strong></td>
+        <td class="width-100"><strong>Kvalifikace</strong></td>
+        {for $i = 1; $i <= $boulderCount; $i++}
+            <td class="width-30"><strong>B{$i}Z</strong></td>
+            <td class="width-30"><strong>B{$i}T</strong></td>
+        {/for}
+        <td class="width-100"><strong>Celkem</strong></td>
+    </tr>
+    {foreach $results as $row}
+        {varType \App\model\Competitor $competitor}
+        {var $competitor = $row['competitor']}
+        {var $resultSumKva = 't' . $row['resultColumnKva']['T'] . 'z' . $row['resultColumnKva']['Z'] . ' pt' . $row['resultColumnKva']['PT'] . 'pz' . $row['resultColumnKva']['PZ']}
+        {var $resultSumFi = 't' . $row['resultColumn']['T'] . 'z' . $row['resultColumn']['Z'] . ' pt' . $row['resultColumn']['PT'] . 'pz' . $row['resultColumn']['PZ']}
+
+        <tr>
+            <td>{$row['place']}.</td>
+            <td>{$competitor->getFullName()}</td>
+            <td>{$competitor->get('club')}</td>
+            <td>{$competitor->get('year')}</td>
+            <td>{$resultSumKva}</td>
+
+            {for $i = 1; $i <= $boulderCount; $i++}
+                <td>{$row['b-'. $i .'-z']|fillEmptyStr|stripHtml}</td>
+                <td>{$row['b-'. $i .'-t']|fillEmptyStr|stripHtml}</td>
+            {/for}
+            <td>{$resultSumFi}</td>
+        </tr>
+    {/foreach}
+</table>
+
+<p style="text-align: left">Tisk: {date('m.d.Y H:i:s', time())}</p>

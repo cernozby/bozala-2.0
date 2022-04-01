@@ -1,0 +1,53 @@
+td {
+    overflow: hidden;
+    padding: 5px;
+    font: Georgia 12px black;
+    border: 1px solid black;
+    border-collapse: collapse;
+
+
+}
+
+.headline-table {
+    font: Georgia 15px black;
+}
+
+.width-100 {
+    width: 100px !important;
+}
+
+.width-150 {
+    width: 150px !important;
+}
+.width-200 {
+    width: 200px !important;
+}
+
+.width-50 {
+    width: 50px !important;
+}
+
+.width-30 {
+    width: 30px !important;
+}
+
+.border-right {
+    border-right: 1px solid black;
+}
+
+.border-left {
+    border-left: 1px solid black;
+}
+
+.border-top {
+    border-top: 1px solid black;
+}
+
+.border-bottom {
+    border-bottom: 1px solid black;
+}
+
+table {
+    border-collapse: collapse;
+    border: 1px solid black;
+}

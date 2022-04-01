@@ -70,7 +70,7 @@
           <div class="col" style="padding-left: 0px;">
             <button class="btn btn-primary show-category m-1" data-id="{$comp->getId()}">Kategorie</button>
             {if $userClass->isAdmin() }
-              <a n:href="DeleteItem! id => $comp->getId(), type => 'Comp' " class="btn btn-primary m-1">Smazat</a>
+              <a n:href="DeleteItem! id => $comp->getId(), type => 'Comp' " class="btn btn-primary m-1 confirm-dialog">Smazat</a>
               <button data-id="{$comp->getId()}"  class="btn btn-primary show-form-comp m-1">Editovat</button>
               <a n:href="ChangeBoolColumn! 'compId' => $comp->getId(), 'column' => 'online_registration' " class="btn btn-primary ajax m-1"> {if $comp->get('online_registration')} Zavřít {else}Otevřít {/if} online předregistraci</a>
               <a n:href="ChangeBoolColumn! 'compId' => $comp->getId(), 'column' => 'editable_result'"  class="btn btn-primary ajax m-1">{if $comp->get('editable_result')} Zavřít {else}Otevřít {/if} editaci výsledků</a>
@@ -102,8 +102,11 @@
 
                   <td>
                   <a href="#" class="btn btn-primary show-form-category" data-id="{$comp->getId()}" data-id-category="{$category->getId()}">Editovat</a>
-                  <a class="btn btn-primary" n:href="DeleteItem! id => $category->getId(), type => 'category' " >Smazat</a>
-                  <a n:href="ChangeBoolCategory! 'categoryId' => $category->getId(), 'column' => 'visible_result'"  class="btn btn-primary ajax">{if $category->visible_result()} Zavřít {else}Otevřít {/if} editaci výsledků</a>
+                  <a class="btn btn-primary confirm-dialog" n:href="DeleteItem! id => $category->getId(), type => 'category' " >Smazat</a>
+                  <a n:href="ChangeBoolCategory! 'categoryId' => $category->getId(), 'column' => 'visible_result'"
+                          class="btn btn-primary ajax">
+                    {if $category->visible_result()} Zavřít {else}Otevřít {/if} editaci výsledků
+                  </a>
                 </td>
                 {/if}
               </tr>

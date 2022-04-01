@@ -1,40 +1,14 @@
 {varType App\model\UserClass $userClass}
+
 <!DOCTYPE html>
 <html>
-<head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
-	<link rel="stylesheet" href="{$basePath}/style/css/styl.css" type="text/css">
-	<link rel="stylesheet" href="{$basePath}/promo/bootstrap/css/bootstrap.min.css" type="text/css">
-
-
-
-	<title>{ifset title}{include title|stripHtml} | {/ifset}Nette Web</title>
-</head>
+	{include '../../templates/head.latte' }
 <body>
 	<div class="body-without-footer">
-	<div id="flash-message">
-		{snippet flashmessage}
-			<div n:foreach="$flashes as $flash" id="myAlert">
-				{if $flash}
-					<div id="myAlert" class="alert alert-{$flash->type} flash-message" role="alert" >
-						{$flash->message}
-					</div>
-				{/if}
-			</div>
-			<script>
-				setTimeout(function () {
-					$('#myAlert').hide('slow');
-				}, 4000);
-			</script>
-		{/snippet}
-	</div>
+		{include '../../templates/flashMessage.latte'}
 
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+<nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
 		<span class="navbar-toggler-icon"></span>
 	</button>
@@ -61,9 +35,6 @@
 					<a class="nav-link text-white" n:href=":Sys:Homepage:default">administrace</a>
 				</li>
 				<li class="nav-item">
-{*
-					<a class="nav-link text-white" n:href="logout!">Odhlásit</a>
-*}
 					<a class="nav-link text-white" n:href=":Sys:Homepage:user">
 						<i class="fa fa-user fa-1x" ></i>
 						{$userClass->get('first_name')}
@@ -79,32 +50,15 @@
 </div>
 
 </div>
-<footer class="text-center text-lg-start bg-primary footer">
-	<!-- Copyright -->
-	<div class="text-center p-3 text-white">
-		© {date('Y')} Zbysek Cernohous:
-		<a class="text-white" href="#">Moje stranky</a>
-	</div>
-	<!-- Copyright -->
-</footer>
+	{include '../../templates/footer.latte'}
+
 
 <!-- modals -->
 	{control formNewCompetitorControl}
-
 	{control formNewCompControl-0}
-
-
 	{block scripts}
 
-
-	<script src="{$basePath}/promo/bootstrap/js/bootstrap.bundle.min.js"></script>
-	<script src="{$basePath}/promo/bootstrap/js/bootstrap.min.js"></script>
-	<script src="https://nette.github.io/resources/js/3/netteForms.min.js"></script>
-	<script src="{$basePath}/naja/Naja.js"></script>
-	<script src="{$basePath}/js/main.js"></script>
-	<script>
-		document.addEventListener('DOMContentLoaded', () => naja.initialize());
-	</script>
+	{include '../../templates/scripts.latte'}
 
 {/block}
 </body>

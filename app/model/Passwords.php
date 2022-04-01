@@ -16,12 +16,12 @@ class Passwords
   const BCRYPT_COST = 10;
 
 
-  /**
-   * Computes salted password hash.
-   * @param  string
-   * @param  array with cost (4-31), salt (22 chars)
-   * @return string  60 chars long
-   */
+    /**
+     * Computes salted password hash.
+     * @param string
+     * @param array|null $options
+     * @return string  60 chars long
+     */
   public static function hash($password, array $options = NULL)
   {
     $options = array('salt' => 'IjvmIjvmIjvmIjvmIjvmIjvmIjvm');

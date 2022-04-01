@@ -1,0 +1,61 @@
+{varType App\model\Comp $comp}
+{varType App\model\Category $category}
+
+<table>
+    <tr>
+        <td colspan="{5 + ($boulderCount * 2 )}" style="text-align: center" class="headline-table">
+            <strong>Boulder {if $category->getComp()->get('boulder_final')}kvalifikace {/if}- {$category->getName()}<strong>
+        </td>
+    </tr>
+    <tr>
+        <td class="width-50"><strong>Pořadí</strong></td>
+        <td class="width-150"><strong>Jméno</strong></td>
+        <td class="width-150"><strong>Oddíl</strong></td>
+        <td class="width-150"><strong>Rok narození</strong></td>
+        {for $i = 1; $i <= $boulderCount; $i++}
+            {if $boulderCount > 10}
+                <td class="width-30"><strong>B{$i}-Z/T</strong></td>
+            {else}
+                <td class="width-30"><strong>B{$i}Z</strong></td>
+                <td class="width-30"><strong>B{$i}T</strong></td>
+            {/if}
+
+        {/for}
+        <td class="width-100"><strong>Celkem</strong></td>
+    </tr>
+    {foreach $results as $row}
+        {varType \App\model\Competitor $competitor}
+        {var $competitor = $row['competitor']}
+
+        <tr><td>{$row['place']}.</td>
+            <td>{$competitor->getFullName()}</td>
+            <td>{$competitor->get('club')}</td>
+            <td>{$competitor->get('year')}</td>
+
+            {for $i = 1; $i <= $boulderCount; $i++}
+                {if $boulderCount > 10}
+                    <td>{$row['b-'. $i .'-z']|fillEmptyStr|stripHtml}/{$row['b-'. $i .'-t']|fillEmptyStr|stripHtml}</td>
+                {else}
+                    <td>{$row['b-'. $i .'-z']|fillEmptyStr|stripHtml}</td>
+                    <td>{$row['b-'. $i .'-t']|fillEmptyStr|stripHtml}</td>
+                {/if}
+            {/for}
+            <td>{$row['resultColumn']|decimalNumber}</td>
+        </tr>
+    {/foreach}
+
+    <tr>
+        <td colspan="4">Bodové ohodnocení</td>
+        {for $i = 1; $i <= $boulderCount; $i++}
+            {if $boulderCount > 10}
+                <td>{$pointForBoulder['b-'. $i .'-z']|decimalNumber} <br> / <br>{$pointForBoulder['b-'. $i .'-t']|decimalNumber}</td>
+            {else}
+                <td>{$pointForBoulder['b-'. $i .'-z']|decimalNumber}</td>
+                <td>{$pointForBoulder['b-'. $i .'-t']|decimalNumber}</td>
+            {/if}
+        {/for}
+        <td></td>
+    </tr>
+</table>
+
+<p style="text-align: left">Tisk: {date('m.d.Y H:i:s', time())}</p>

@@ -11,48 +11,51 @@
         {/foreach}
     {else}
         {snippet listOfPrereg}
+        {var $isAdmin = $userClass->isAdmin()}
         {varType App\model\Category[] $categories}
         {foreach $categories as $category}
-            {if $userClass->isAdmin()}
-                {var $unpreregCompetitors = $category->getUnpreregCompetitors()}
-            {else}
-                {var $unpreregCompetitors = array()}
-            {/if}
+            {var $unpreregCompetitors = $isAdmin ? $category->getUnpreregCompetitors() : array()}
             <div class="table-responsive container">
-            <table class="table border table-vertical-middle">
-                <tr>
-                    <th colspan="3">{$category->getComp()->getCompName()} - {$category->getCategoryName()}</th>
-                </tr>
-                <tr>
-                    <th class="text-left">#</th>
-                    <th>Jméno</th>
-                    <th>Oddil</th>
-                    <th>Rok narození</th>
-                    {if $userClass->isAdmin()}
-                        <th class="admin-part" style="display: none">Akce</th>
-                    {/if}
-                </tr>
-                {foreach $category->getPreregCompetitors() + $unpreregCompetitors as $competitor}
-                    {var $isPrereg = $competitor->isPrereg($category->getId())}
-                    <tr {if !$isPrereg} class="admin-part get-red" style="display: none"{else} class="get-green"{/if} >
-                        <td class="text-left">{$iterator}</td>
-                        <td>{$competitor->getFullName()}</td>
-                        <td>{$competitor->get('club')}</td>
-                        <td>{$competitor->get('year')}</td>
-                        {if $userClass->isAdmin()}
-                            <td class="admin-part" style="display: none">
-                                <a n:href="prereg! 'categoryId' => $category->getId(), 'competitorId' => $competitor->getId(), 'admin' => '1'" class="btn btn-primary ajax btn-change-registration">
-                                    {if $isPrereg}Odhlasit{else}Predregistrovat{/if}
-                                </a>
-                            </td>
+                <table class="table border table-vertical-middle">
+                    <tr>
+                        <th colspan="{if $isAdmin} 5 {else} 4 {/if}">{$category->getComp()->getCompName()} - {$category->getCategoryName()}</th>
+                    </tr>
+                    <tr>
+                        <th class="text-left">#</th>
+                        <th>Jméno</th>
+                        <th>Oddil</th>
+                        <th>Rok narození</th>
+                        {if $isAdmin}
+                            <th class="admin-part" style="display: none">Akce</th>
                         {/if}
                     </tr>
-                    {control formNewCompetitorControl $competitor->getId()}
-                {/foreach}
-            </table>
+                    {foreach $category->getPreregCompetitors() + $unpreregCompetitors as $competitor}
+                        {var $isPrereg = $competitor->isPrereg($category->getId())}
+                        <tr {if !$isPrereg} class="admin-part get-red" style="display: none"{else} class="get-green"{/if} >
+                            <td class="text-left">{$iterator}</td>
+                            <td>{$competitor->getFullName()}</td>
+                            <td>{$competitor->get('club')}</td>
+                            <td>{$competitor->get('year')}</td>
+                            {if $isAdmin}
+                                <td class="admin-part" style="display: none">
+                                    <a n:href="prereg! 'categoryId' => $category->getId(), 'competitorId' => $competitor->getId(), 'admin' => '1'"
+                                            class="btn btn-primary btn-change-registration ajax"
+                                            data-text="Opravdu si přejete {if $isPrereg}odhlasit se ze závodu? Veškeré výsledky budou ztraceny.{else}předregistrovat se na tento závod.{/if}">
+                                        {if $isPrereg}Odhlasit{else}Predregistrovat{/if}
+                                    </a>
+                                </td>
+                            {/if}
+                        </tr>
+                    {/foreach}
+                </table>
+                <a class="btn btn-primary col-3 m-3"
+                   n:href="generatePdfCategory! idCategory => $category->getId(), latteFilename => 'starters'"
+                   target="_blank">
+                    Generovat startovku
+                </a>
             </div>
         {/foreach}
-            {if $userClass->isAdmin()}<button id="changeAdminPart" class="btn btn-primary">Admin verze</button>{/if}
+            {if $isAdmin}<button id="changeAdminPart" class="btn btn-primary">Admin verze</button>{/if}
 
             <script>
                 $('#changeAdminPart').trigger('click');

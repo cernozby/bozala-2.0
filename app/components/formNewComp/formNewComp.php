@@ -55,6 +55,9 @@ class formNewComp extends BaseComponent {
 
     $form->addInteger("boulder_final_competitors", 'Závodníků ve finále:');
     $form->addInteger("lead_final_competitors", 'Závodníků ve finále:');
+
+    $form->addInteger("boulder_final_boulders", 'Bouldrů ve finále:');
+
     $form->addUpload('propo', 'Propozice: ');
 
     $form->addCheckbox("isLead")->setOmitted();

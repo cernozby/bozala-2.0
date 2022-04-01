@@ -6,7 +6,7 @@
 <div class="table-responsive" style="padding: 15px; margin-bottom: 30px">
     <table class="table table-add-result border" style="padding: 15px !important;">
         <tr>
-            <th colspan="{3 + ($category->getComp()->get('boulder') )}">
+            <th colspan="{3 + ($category->getComp()->get('lead') )}">
                 <h2>Obtížnost kvalifikace - {$category->getName()}</h2>
             </th>
         </tr>
@@ -37,7 +37,9 @@
         {/foreach}
     </table>
     <button type="button" class="btn btn-primary" id="save_result_lead_kva">Uložit</button>
-    <a class="btn btn-primary" n:href="makeFinalList! idCategory => $categoryId">Vygenerovat finálovou listinu</a>
+    {if $category->getComp()->get('lead_final')}
+        <a class="btn btn-primary confirm-dialog" n:href="makeFinalList! idCategory => $categoryId, type => App\model\ResultModel::LEAD_KVA">Vygenerovat finálovou listinu</a>
+    {/if}
 
 </div>
 

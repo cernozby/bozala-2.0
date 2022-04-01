@@ -1,4 +1,23 @@
 $(document).ready(function () {
+    //potvrzovací dialog
+
+    $(document).on('click', '.confirm-dialog', function (event) {
+        let question = $(this).data.text;
+        question = question ? question : "Opravdu si přejete provest tuto akci?";
+        if (!window.confirm(question)) {
+            event.preventDefault();
+        }
+    })
+
+    naja.uiHandler.addEventListener('interaction', (event) => {
+        const {element} = event.detail;
+        const question = "Opravdu si přejete provest tuto akci?";
+        if (question && ! window.confirm(question)) {
+            event.preventDefault();
+        }
+    });
+
+
     //form-competitor show
     $(document).on('click', '.show-form-competitor', function () {
         if ($(this).data("id")) {
@@ -57,6 +76,8 @@ function addFlashmessage(message, type) {
         $('.temporary').hide('slow', function(){ $(this).remove(); });
     }, 4000);
 }
+
+
 
 function saveResult(dataTable, link) {
     $.ajax({

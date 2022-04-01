@@ -104,7 +104,7 @@ class Comp extends BaseFactory
       return $this->getBoulderResultType() == CompModel::AMATEUR_RESULT;
   }
 
-    public function isBoulderResultComp() : bool {
-        return $this->getBoulderResultType() == CompModel::COMP_RESULT;
-    }
+  public function isBoulderResultComp() : bool {
+    return $this->getBoulderResultType() == CompModel::COMP_RESULT;
+  }
 }

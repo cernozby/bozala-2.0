@@ -15,6 +15,7 @@ use App\model\Comp;
 use App\model\Competitor;
 use App\model\CompetitorModel;
 use App\model\CompModel;
+use App\model\PdfModel;
 use App\model\Prereg;
 use App\model\PreregModel;
 use App\model\Result;
@@ -53,6 +54,8 @@ abstract class BasePresenter extends Presenter {
 
   public ResultModel $resultModel;
 
+  public PdfModel $pdfModel;
+
   public function __construct(Container $container,
                               UserModel $userModel,
                               UserClass $userClass,
@@ -65,7 +68,8 @@ abstract class BasePresenter extends Presenter {
                               Prereg $prereg,
                               PreregModel $preregModel,
                               Result $result,
-                              ResultModel $resultModel)
+                              ResultModel $resultModel,
+                              PdfModel $pdfModel)
   {
     $this->container = $container;
     $this->userModel = $userModel;
@@ -80,6 +84,7 @@ abstract class BasePresenter extends Presenter {
     $this->preregModel = $preregModel;
     $this->result = $result;
     $this->resultModel = $resultModel;
+    $this->pdfModel = $pdfModel;
     parent::__construct();
   }
   

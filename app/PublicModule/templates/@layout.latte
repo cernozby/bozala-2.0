@@ -1,110 +1,55 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+{include '../../templates/head.latte'}
+	<body>
+			{include '../../templates/flashMessage.latte'}
 
-	<link rel="stylesheet" href="{$basePath}/style/css/styl.css" type="text/css">
-	<link rel="stylesheet" href="{$basePath}/promo/bootstrap/css/bootstrap.min.css" type="text/css">
+			<nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
+				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03"
+						aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+				<a class="navbar-brand" href="#">Navbar</a>
 
-
-
-	<title>{ifset title}{include title|stripHtml} | {/ifset}Nette Web</title>
-</head>
-
-<body>
-<div class="body-without-footer">
-
-<div n:foreach="$flashes as $flash">
-	<div class="container">
-		<!-- Trigger the modal with a button -->
-		<button type="button" class="btn btn-info btn-lg" id="modal" data-toggle="modal" data-target="#myModal"
-						hidden="true"></button>
-		<!-- Modal -->
-		<div class="modal fade" id="myModal" role="dialog">
-			<div class="modal-dialog">
-				<!-- Modal content-->
-				<div class="modal-content alert text-center">
-					<div class="modal-body">
-						<h4>{$flash->message}<h4>
-					</div>
-					<div>
-						<button type="button" class="btn btn-warning text-dark" data-dismiss="modal" style="width: 20%;">Zavřít
-						</button>
+				<div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+					<ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+						<li class="nav-item active">
+							<a class="nav-link text-white" href="#">Domů <span class="sr-only">(current)</span></a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link text-white" href="#">FAQ</a>
+						</li>
+					</ul>
+					<div class="d-flex">
+						<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+							<li class="nav-item">
+								<a class="nav-link text-white" n:href="Login!">Přihlášení</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link text-white" n:href="Registration!">Registrace</a>
+							</li>
+						</ul>
 					</div>
 				</div>
-			</div>
-		</div>
-	</div>
-</div>
+			</nav>
+
+			{include content}
+
+			{include '../../templates/footer.latte'}
 
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
-			<span class="navbar-toggler-icon"></span>
-		</button>
-		<a class="navbar-brand" href="#">Navbar</a>
-
-		<div class="collapse navbar-collapse" id="navbarTogglerDemo03">
-			<ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-				<li class="nav-item active">
-					<a class="nav-link text-white" href="#">Domů <span class="sr-only">(current)</span></a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link text-white" href="#">FAQ</a>
-				</li>
-			</ul>
-			<div class="d-flex">
-				<ul class="navbar-nav me-auto mb-2 mb-lg-0">
-					<li class="nav-item">
-						<a class="nav-link text-white" n:href="Login!">Přihlášení</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link text-white" n:href="Registration!">Registrace</a>
-					</li>
-				</ul>
-			</div>
-		</div>
-	</nav>
-
-	<div class="container">
-		{include content}
-	</div>
-
-</div>
-	<footer class="text-center text-lg-start bg-primary footer">
-		<!-- Copyright -->
-		<div class="text-center p-3 text-white">
-			© {date('Y')} Zbysek Cernohous:
-			<a class="text-white" href="#">Moje stranky</a>
-		</div>
-		<!-- Copyright -->
-	</footer>
-
-
-	<!-- modals -->
-{if isset($loginForm)}
-	{control formLoginControl}
-{/if}
-{if isset($registrationForm)}
-	{control formRegistrationControl}
-{/if}
-	{block scripts}
-{if isset($forgetPasswdForm)}
-	{control formForgetPasswd}
-{/if}
-
-
-
-	<script src="{$basePath}/promo/bootstrap/js/bootstrap.bundle.min.js"></script>
-		<script src="{$basePath}/promo/bootstrap/js/bootstrap.min.js"></script>
-		<script src="https://nette.github.io/resources/js/3/netteForms.min.js"></script>
-
-		<script type="text/javascript">
-			document.getElementById("modal").click();
-		</script>
-	{/block}
-</body>
+				<!-- modals -->
+			{if isset($loginForm)}
+				{control formLoginControl}
+			{/if}
+			{if isset($registrationForm)}
+				{control formRegistrationControl}
+			{/if}
+				{block scripts}
+				{if isset($forgetPasswdForm)}
+					{control formForgetPasswd}
+				{/if}
+				{include '../../templates/scripts.latte'}
+			{/block}
+	</body>
 </html>

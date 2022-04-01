@@ -19,7 +19,10 @@ class BaseComponent extends \Nette\Application\UI\Control {
    * @var UserModel
    */
   public $userModel;
-  
+
+    /**
+     * @var UserClass
+     */
   public UserClass $userClass;
 
   public function __construct(Presenter $presenter, Container $container, UserClass $userClass) {

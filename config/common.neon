@@ -45,6 +45,8 @@ services:
 	    class: App\model\Result
 	resultModel:
 	    class: App\model\ResultModel
+	PdfModel:
+	    class: App\model\pdfModel
 
 forms:
 	messages:

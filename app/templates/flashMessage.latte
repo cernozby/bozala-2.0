@@ -1,0 +1,21 @@
+<div id="flash-message">
+    {snippet flashmessage}
+        <div n:foreach="$flashes as $flash" id="myAlert">
+            {if $flash}
+                <div id="myAlert" class="alert alert-{$flash->type} alert-dismissible fade show flash-message" role="alert">
+                    {$flash->message}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {/if}
+        </div>
+
+
+        <script>
+            setTimeout(function () {
+                $('#myAlert').hide('slow');
+            }, 4000);
+        </script>
+    {/snippet}
+</div>

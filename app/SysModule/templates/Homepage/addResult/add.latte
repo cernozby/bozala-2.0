@@ -5,6 +5,9 @@
 
 {if $comp->isBoulderComp()}
     {include 'resultType\boulder.latte'}
+    {if $category->getResult(App\model\ResultModel::BOULDER_FI)}
+        {include 'resultType\boulderFinal.latte'}
+    {/if}
 {/if}
 {if $comp->isLeadComp()}
     {include 'resultType\lead.latte'}

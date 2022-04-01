@@ -1,0 +1,26 @@
+{varType App\model\Comp $comp}
+{varType App\model\Category $category}
+
+<table>
+    <tr>
+        <td colspan="4" style="text-align: center" class="headline-table">
+            <strong>{$category->getName()} - starortovní listina<strong>
+        </td>
+    </tr>
+    <tr>
+        <td class="width-50"><strong>#</strong></td>
+        <td class="width-200"><strong>Jméno</strong></td>
+        <td class="width-200"><strong>Oddíl</strong></td>
+        <td class="width-200"><strong>Rok narození</strong></td>
+    </tr>
+    {foreach $category->getPreregCompetitors() as $competitor}
+        <tr>
+            <td>{$iterator}.</td>
+            <td>{$competitor->getFullName()}</td>
+            <td>{$competitor->get('club')}</td>
+            <td>{$competitor->get('year')}</td>
+        </tr>
+    {/foreach}
+</table>
+
+<p style="text-align: left">Tisk: {date('m.d.Y H:i:s', time())}</p>
