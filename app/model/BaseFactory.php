@@ -13,7 +13,8 @@ use PDOException;
  * Class BaseFactory
  * @package App\model
  */
-Class BaseFactory extends BaseModel {
+Class BaseFactory extends BaseModel
+{
   
   /**
    * @var
@@ -42,38 +43,43 @@ Class BaseFactory extends BaseModel {
   
   
   /**
-   * 
+   *
    * @param int $id
    * @return $this
    */
-  public function initId(int $id) :?object {
+  public function initId(int $id): ?object {
     if ($this->data && $this->getId() === $id) {
       return $this;
     }
     
     $this->id = $id;
     $this->load();
-
+    
     return $this->data ? $this : null;
   }
   
   /**
    * @return int
    */
-  public function getId() : int {
+  public function getId(): int {
     return $this->id;
   }
-
+  
+  public function getRowAsArray() : array {
+    $result =  $this->getTable()->get($this->getid());
+    return $result ? $result->toArray() : array();
+  }
+  
   /**
-   * 
+   *
    * @param array | Row $data
    * @return $this
    */
-  public function initData($data) : ?object {
+  public function initData($data): ?object {
     if (!$data) {
       return null;
     }
-
+    
     $this->data = $data;
     $primary = $this->primary;
     if ($data instanceof Row) {
@@ -88,30 +94,30 @@ Class BaseFactory extends BaseModel {
   /**
    * @return array|null
    */
-  public function getData() : ?array {
+  public function getData(): ?array {
     return $this->data;
   }
   
   /**
    *
    */
-  public function load() : void {
+  public function load(): void {
     $this->data = $this->getTable()->select('*')->where($this->primary . ' = ?', $this->getId())->fetch();
   }
-  
-  /**
-   * @param $col
-   * @return |null
-   */
+
+    /**
+     * @param $col
+     * @return null
+     */
   public function get($col) {
-      return $this->data->$col ?? null;
+    return $this->data->$col ?? null;
   }
   
   /**
    * @param array $array
    * @return array
    */
-  public function getArray(array $array) : array {
+  public function getArray(array $array): array {
     $result = array();
     foreach ($array as $a) {
       $result[$a] = $this->get($a);
@@ -119,12 +125,15 @@ Class BaseFactory extends BaseModel {
     return $result;
   }
   
-  
+
+  public function changeBoolColumn(string $column) {
+      $this->set($column, !$this->get($column));
+  }
   /**
    * @param $col
    * @param $value
    */
-  public function set($col, $value) : void {
+  public function set($col, $value): void {
     try {
       $this->getTable()->where($this->primary . ' = ?', $this->getId())->update(array($col => $value));
       $this->load();
@@ -137,7 +146,7 @@ Class BaseFactory extends BaseModel {
   /**
    * @param array $values
    */
-  public function setArray(array $values) : void {
+  public function setArray(array $values): void {
     try {
       $this->getTable()->where($this->primary . ' = ?', $this->getId())->update($values);
       $this->load();
@@ -150,10 +159,10 @@ Class BaseFactory extends BaseModel {
   /**
    *
    */
-  public function delete() : void {
+  public function delete(): void {
     $this->getTable()
-            ->where($this->primary . ' = ?', $this->getId())
-            ->delete();
+      ->where($this->primary . ' = ?', $this->getId())
+      ->delete();
   }
   
   
@@ -161,14 +170,14 @@ Class BaseFactory extends BaseModel {
    * @param $data
    * @param false $lastMod
    */
-  public function update($data, $lastMod = false) : void {
+  public function update($data, $lastMod = false): void {
     
     if ($lastMod) {
       $data['last_mod'] = new Nette\Utils\DateTime();
     }
     $this->getTable()
-            ->where($this->primary . ' = ?', $this->getId())
-            ->update($data);
+      ->where($this->primary . ' = ?', $this->getId())
+      ->update($data);
   }
   
   /**
@@ -179,5 +188,4 @@ Class BaseFactory extends BaseModel {
     $row = $this->getTable()->insert($data);
     return $row->getPrimary();
   }
-  
 }

@@ -2,6 +2,6 @@ parameters:
 
 
 database:
-	dsn: 'mysql:host=127.0.0.1;dbname=dummy_db'
+	dsn: 'mysql:host=127.0.0.1;dbname=bozala-2'
 	user: 'root'
 	password: 'root'

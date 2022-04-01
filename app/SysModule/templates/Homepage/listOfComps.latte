@@ -1,0 +1,125 @@
+{block content}
+  {varType App\model\Comp[] $comps}
+  {if $comps}
+    {snippet comp}
+    {foreach $comps as $comp}
+      <div class="mt-5 mb-5">
+        <div style="padding: 15px">
+          <table class="table border table-responsive-md" style="padding: 15px !important;">
+            <tr>
+              <th>Jméno</th>
+              <th>Datum</th>
+              {if $userClass->isAdmin()}
+                <th>Online Registrace</th>
+                <th>Viditelná předregistrace</th>
+                {if $comp->isLeadComp()}
+                  <th>Počet cest</th>
+                  <th>Finále</th>
+                  {if $comp->get('lead_final_competitors')}
+                    <th>zavodniku ve F.</th>
+                  {/if}
+                {/if}
+                {if $comp->isBoulderComp()}
+                  <th>Počet bouldrů</th>
+                  <th>Systém výsledků</th>
+                  <th>Finále</th>
+                  {if $comp->get('boulder_final_competitors')}
+                    <th>zavodniku ve F.</th>
+                  {/if}
+                {/if}
+                {if $comp->isSpeedComp()}
+                  <th>Počet pokusů</th>
+                  <th>Finále</th>
+                {/if}
+                <th>propozice</th>
+              {/if}
+            </tr>
+            <tr>
+              <td>{$comp->get('name')}</td>
+              <td>{$comp->get('date')|date:'d. m. Y'}</td>
+              {if $userClass->isAdmin()}
+                <td>{$comp->get('online_registration')|boolToWorld}</td>
+                <td>{$comp->get('visible_prereg')|boolToWorld}</td>
+                {if $comp->isLeadComp()}
+                  <td>{$comp->get('lead')}</td>
+                  <td>{$comp->get('lead_final')|boolToWorld}</td>
+                  {if $comp->get('lead_final_competitors')}
+                    <td>{$comp->get('lead_final_competitors')}</td>
+                  {/if}
+                {/if}
+                {if $comp->isBoulderComp()}
+                  <td>{$comp->get('boulder')}</td>
+                  <td>{$comp->get('boulder_result')|resultType}</td>
+                  <td>{$comp->get('boulder_final')|boolToWorld}</td>
+                  {if $comp->get('boulder_final_competitors')}
+                    <td>{$comp->get('boulder_final_competitors')}</td>
+                  {/if}
+                {/if}
+                {if $comp->isSpeedComp()}
+                  <td>{$comp->get('speed')}</td>
+                  <td>{$comp->get('speed_final')|boolToWorld}</td>
+                {/if}
+                  <td>
+                    {if $comp->get('propo_path') }
+                      <a href="{$comp->get('propo_path')}" target="_blank">propozice</a>
+                    {/if}
+                  </td>
+              {/if}
+            </tr>
+          </table>
+          <div class="col" style="padding-left: 0px;">
+            <button class="btn btn-primary show-category m-1" data-id="{$comp->getId()}">Kategorie</button>
+            {if $userClass->isAdmin() }
+              <a n:href="DeleteItem! id => $comp->getId(), type => 'Comp' " class="btn btn-primary m-1 confirm-dialog">Smazat</a>
+              <button data-id="{$comp->getId()}"  class="btn btn-primary show-form-comp m-1">Editovat</button>
+              <a n:href="ChangeBoolColumn! 'compId' => $comp->getId(), 'column' => 'online_registration' " class="btn btn-primary ajax m-1"> {if $comp->get('online_registration')} Zavřít {else}Otevřít {/if} online předregistraci</a>
+              <a n:href="ChangeBoolColumn! 'compId' => $comp->getId(), 'column' => 'editable_result'"  class="btn btn-primary ajax m-1">{if $comp->get('editable_result')} Zavřít {else}Otevřít {/if} editaci výsledků</a>
+              <a n:href="ChangeBoolColumn! 'compId' => $comp->getId(), 'column' => 'visible_prereg'"  class="btn btn-primary ajax m-1">{if $comp->get('visible_prereg')} Skrýt {else}Zobrazit {/if} předregistraci</a>
+            {/if}
+            {control "formNewCompControl-". $comp->getId()}
+          </div>
+
+        <div id="category-list-{$comp->getId()}" class="form-hide">
+          <table class="table border table-vertical-middle">
+            <tr>
+              <th>Jméno</th>
+              <th>Typ</th>
+              <th>Nejmladší</th>
+              <th>nejstarší</th>
+              {if $userClass->isAdmin()}
+                <th>zobrazit výsledky</th>
+                <th>Akce</th>
+              {/if}
+            </tr>
+            {foreach $comp->getCategory() as $category}
+              <tr>
+                <td>{$category->get('name')}</td>
+                <td>{$category->get('gender')|gender}</td>
+                <td>{$category->get('year_young')}</td>
+                <td>{$category->get('year_old')}</td>
+                {if $userClass->isAdmin()}
+                  <td>{$category->visible_result()|boolToWorld}</td>
+
+                  <td>
+                  <a href="#" class="btn btn-primary show-form-category" data-id="{$comp->getId()}" data-id-category="{$category->getId()}">Editovat</a>
+                  <a class="btn btn-primary confirm-dialog" n:href="DeleteItem! id => $category->getId(), type => 'category' " >Smazat</a>
+                  <a n:href="ChangeBoolCategory! 'categoryId' => $category->getId(), 'column' => 'visible_result'"
+                          class="btn btn-primary ajax">
+                    {if $category->visible_result()} Zavřít {else}Otevřít {/if} editaci výsledků
+                  </a>
+                </td>
+                {/if}
+              </tr>
+              {control "formNewCategoryControl-".$comp->getId()."x" . $category->getId()}
+
+            {/foreach}
+          </table>
+          {if $userClass->isAdmin()}<button class="btn btn-primary show-form-category" data-id="{$comp->getId()}" >Nová kategorie</button>{/if}
+        </div>
+        </div>
+        {control "formNewCategoryControl-".$comp->getId()}
+      </div>
+    {/foreach}
+    {/snippet}
+  {/if}
+{/block}

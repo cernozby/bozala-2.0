@@ -1,0 +1,55 @@
+{varType App\model\Category $category}
+{varType App\model\ResultModel $resultModel}
+{varType App\model\Competitor[] $finalLeadCompetitors}
+{var $results = $resultModel->resultToCompetitor($category->getResult(App\model\ResultModel::LEAD_FI))}
+
+<div class="table-responsive" style="padding: 15px; margin-bottom: 30px">
+    <table class="table table-add-result border" style="padding: 15px !important;">
+        <tr>
+            <th colspan="{4}">
+                <h2>Obtížnost Finále - {$category->getName()}</h2>
+            </th>
+        </tr>
+        <tr>
+            <th>Jméno</th>
+            <th>Oddil</th>
+            <th>Rok narození</th>
+            <th>cesta&nbsp;1</th>
+        </tr>
+
+        {foreach $finalLeadCompetitors as $competitor}
+            {var $value = (key_exists($competitor->getId(), $results) && is_array($results[$competitor->getId()])) ? $results[$competitor->getId()]["route-1"] : ''}
+            <tr id="lead-fi" data-competitor="{$competitor->getId()}">
+                <td>{$competitor->getFullName()}</td>
+                <td>{$competitor->get('club')}</td>
+                <td>{$competitor->get('year')}</td>
+
+                <td class="have-input" data-key="route-1">
+                    <input class="inside-td" type="text" value="{$value}"/>
+                </td>
+            </tr>
+        {/foreach}
+    </table>
+    <button type="button" class="btn btn-primary" id="save_result_lead_fi">Uložit</button>
+
+</div>
+
+<script>
+    $(document).on('click', '#save_result_lead_fi', function () {
+        let dataTable = {};
+        let idRacer;
+        dataTable['type'] = {App\model\ResultModel::LEAD_FI};
+        dataTable['idCategory'] = {$category->getId()};
+        $("tr[id='lead-fi']").each( function (index){
+            idRacer = $(this).data('competitor')
+            dataTable[idRacer] = {};
+            $(this).find("td[class='have-input']").each(function () {
+                dataTable[idRacer][$(this).data('key')] = $(this).find("input").val();
+            })
+        });
+        console.log(dataTable);
+
+        saveResult(dataTable, {link saveResult!});
+    });
+
+</script>

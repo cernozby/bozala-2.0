@@ -1,0 +1,62 @@
+{varType App\model\Category $category}
+{var $results = $category->getBoulderFullResult(App\model\ResultModel::BOULDER_FI)}
+{if !$results}
+    <h2> Žádné výsledky k zobrazení.</h2>
+{else}
+    {var $pointForBoulder = $category->getPointsForBoulder(App\model\ResultModel::BOULDER_FI)}
+
+    <div class="table-responsive" style="padding: 15px; margin-bottom: 30px">
+        <table class="table table-add-result border" style="padding: 15px !important;">
+            <tr>
+                <th colspan="{5 + ($category->getComp()->get('boulder_final_boulders') * 2 )}">
+                    <h2>Boulder finále - {$category->getName()}</h2>
+                </th>
+            </tr>
+            <tr>
+                <th>Pořadí</th>
+                <th>Jméno</th>
+                <th>Oddil</th>
+                <th>Rok narození</th>
+                <th>Kvalifikace</th>
+
+                {for $i = 1; $i <= $category->getComp()->get('boulder_final_boulders'); $i++}
+
+                    <th>B{$i}Z</th>
+                    <th>B{$i}T</th>
+                {/for}
+                <th>celkem</th>
+            </tr>
+            {foreach $results as $row}
+                {varType \App\model\Competitor $competitor}
+                {var $competitor = $row['competitor']}
+
+                <tr><td>{$row['place']}.</td>
+                    <td>{$competitor->getFullName()}</td>
+                    <td>{$competitor->get('club')}</td>
+                    <td>{$competitor->get('year')}</td>
+                    <td>{$row['resultColumnKva']|decimalNumber}</td>
+                    {for $i = 1; $i <= $category->getComp()->get('boulder_final_boulders'); $i++}
+                        <td>{$row['b-'. $i .'-z']|boulderAmateur|stripHtml}</td>
+                        <td>{$row['b-'. $i .'-t']|boulderAmateur|stripHtml}</td>
+                    {/for}
+                    <td>{$row['resultColumn']|decimalNumber}</td>
+                </tr>
+            {/foreach}
+
+            <tr>
+                <th colspan="5">Bodové ohodnocení</th>
+                {for $i = 1; $i <= $category->getComp()->get('boulder_final_boulders'); $i++}
+                    <td>{$pointForBoulder['b-'. $i .'-z']|decimalNumber}</td>
+                    <td>{$pointForBoulder['b-'. $i .'-t']|decimalNumber}</td>
+                {/for}
+                <td></td>
+            </tr>
+        </table>
+
+        {if $userClass->isAdmin()}
+        <a class="btn btn-primary col-3 m-3"
+                n:href="generatePdfCategory! idCategory => $category->getId(), latteFilename => 'boulder-amateur-final'"
+           target="_blank">Výsledky pdf</a>
+        {/if}
+    </div>
+{/if}

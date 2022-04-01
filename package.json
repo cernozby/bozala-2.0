@@ -1,0 +1,8 @@
+{
+  "name": "bozala-2.0",
+  "version": "1.0.0",
+  "dependencies": {
+    "jquery-nette": "^3.3.1",
+    "naja": "^2.1.4"
+  }
+}

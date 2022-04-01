@@ -28,7 +28,7 @@ class UserClass extends BaseFactory
    * @return string
    */
   public function getFullName() : string {
-    return $this->get('first_name') . $this->get('last_name');
+    return $this->get('first_name') . ' ' . $this->get('last_name');
   }
   
   /**

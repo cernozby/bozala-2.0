@@ -1,0 +1,60 @@
+{varType App\model\Category $category}
+{varType App\model\ResultModel $resultModel}
+{varType App\model\Competitor[] $competitors}
+{var $results = $resultModel->resultToCompetitor($category->getResult(App\model\ResultModel::BOULDER_KVA))}
+<div class="table-responsive" style="padding: 15px; margin-bottom: 30px">
+    <table class="table table-add-result border" style="padding: 15px !important;">
+        <tr>
+            <th colspan="{3 + ($category->getComp()->get('boulder') * 2 )}">
+                <h2>Boulder kvalifikace - {$category->getName()}</h2>
+            </th>
+        </tr>
+        <tr>
+            <th>Jméno</th>
+            <th>Oddil</th>
+            <th>Rok narození</th>
+
+            {for $i = 1; $i <= $category->getComp()->get('boulder'); $i++}
+
+                <th>B{$i}Z</th>
+                <th>B{$i}T</th>
+            {/for}
+        </tr>
+        {foreach $competitors as $competitor}
+            {var $resultExist = key_exists($competitor->getId(), $results)}
+            <tr id="boulder-kva" data-competitor="{$competitor->getId()}">
+                <td>{$competitor->getFullName()}</td>
+                <td>{$competitor->get('club')}</td>
+                <td>{$competitor->get('year')}</td>
+
+                {for $i = 1; $i <= $category->getComp()->get('boulder'); $i++}
+                    <td class="have-input" data-key="b-{$i}-z"><input  class="inside-td" value="{if $resultExist}{$results[$competitor->getId()]['b-'. $i .'-z']}{/if}" type="text"/></td>
+                    <td class="have-input" data-key="b-{$i}-t"><input class="inside-td" value="{if $resultExist}{$results[$competitor->getId()]['b-'. $i .'-t']}{/if}" type="text"/></td>
+                {/for}
+            </tr>
+        {/foreach}
+    </table>
+    <button type="button" class="btn btn-primary" id="save_result_boulder">Uložit</button>
+    {if $category->getComp()->get('lead_final')}
+        <a class="btn btn-primary confirm-dialog" n:href="makeFinalList! idCategory => $categoryId, type => App\model\ResultModel::BOULDER_KVA">Vygenerovat finálovou listinu</a>
+    {/if}
+</div>
+
+<script>
+    $(document).on('click', '#save_result_boulder', function () {
+        let dataTable = {};
+        let idRacer;
+        dataTable['type'] = {App\model\ResultModel::BOULDER_KVA};
+        dataTable['idCategory'] = {$category->getId()};
+        $("tr[id='boulder-kva']").each( function (index){
+            idRacer = $(this).data('competitor')
+            dataTable[idRacer] = {};
+            $(this).find("td[class='have-input']").each(function () {
+                dataTable[idRacer][$(this).data('key')] = $(this).find("input").val();
+            })
+        });
+
+        saveResult(dataTable, {link saveResult!});
+    });
+
+</script>

@@ -1,0 +1,26 @@
+{varType App\model\Category $category}
+{varType App\model\Comp $comp}
+{var $multi = []}
+
+{if $comp->get('boulder') && $comp->isBoulderResultComp()}
+    {php $multi[] = 'boulder-comp'}
+    {include 'resultType/boulder-comp.latte'}
+    {if $category->getResult(App\model\ResultModel::BOULDER_FI)}
+        {include 'resultType\boulder-comp-final.latte'}
+    {/if}
+{/if}
+{if $comp->get('boulder') && $comp->isBoulderResultAmateur()}
+    {php $multi[] = 'boulder-amateur'}
+    {include 'resultType/boulder-amateur.latte'}
+    {if $category->getResult(App\model\ResultModel::BOULDER_FI)}
+        {include 'resultType\boulder-amateur-final.latte'}
+    {/if}
+{/if}
+{if $comp->get('lead')}
+    {php $multi[] = 'lead'}
+    {include 'resultType/lead.latte'}
+{/if}
+{if $comp->get('speed')}
+    {php $multi[] = 'speed'}
+    {include 'resultType/speed.latte'}
+{/if}

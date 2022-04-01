@@ -1,0 +1,125 @@
+{form newCompForm}
+  <div class="modal fade" id="newCompModalCentre{if $compId}-{$compId}{/if}" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Nový Závod</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          {var $classBoulder = ''}
+          {var $classSpeed = ''}
+          {var $classLead = ''}
+          {if !$form->values->offsetGet('boulder') > 0} {var $classBoulder = 'form-hide'}{/if}
+          {if !$form->values->offsetGet('speed') > 0} {var $classSpeed = 'form-hide'}{/if}
+          {if !$form->values->offsetGet('lead') > 0} {var $classLead = 'form-hide'}{/if}
+
+          <div class="row col-md-12 d-flex">
+            <div class="col-md-4 form-group pt-2 font-weight-bold"><p>{label name /}</p></div>
+            <div class="col-md-8 form-group pb-3">{input name class => 'form-control'}</div>
+            <div class="col-md-4 form-group pt-2 font-weight-bold"><p>{label date /}</p></div>
+            <div class="col-md-8 form-group pb-3">{input date class => 'form-control'}</div>
+
+            <div class="col-md-4 form-group pt-2 pb-3">Obtížnost  {input isLead class => 'form-control'} </div>
+            <div class="col-md-4 form-group pt-2 pb-3">Boulder  {input isBoulder class => 'form-control'} </div>
+            <div class="col-md-4 form-group pt-2 pb-3">Rychlost  {input isSpeed class => 'form-control'} </div>
+
+            <div class="{$classBoulder} boulder_count col-md-4 form-group pt-2 font-weight-bold">{label boulder /}</div>
+            <div class="{$classBoulder} boulder_count col-md-8 form-group pb-3">{input boulder class => 'form-control boulder_input'}</div>
+            <div class="{$classBoulder} boulder_final col-md-4 form-group pt-2 font-weight-bold">{label boulder_final /}</div>
+            <div class="{$classBoulder} boulder_final col-md-8 form-group pb-3">{input boulder_final class => 'form-control boulder_final_input'}</div>
+            <div class="{$classBoulder} boulder_final_competitors col-md-4 form-group pt-2 font-weight-bold">{label boulder_final_competitors /}</div>
+            <div class="{$classBoulder} boulder_final_competitors col-md-8 form-group pb-3">{input boulder_final_competitors class => 'form-control'}</div>
+            <div class="{$classBoulder} boulder_final_boulders col-md-4 form-group pt-2 font-weight-bold">{label boulder_final_boulders /}</div>
+            <div class="{$classBoulder} boulder_final_boulders col-md-8 form-group pb-3">{input boulder_final_boulders class => 'form-control'}</div>
+            <div class="{$classBoulder} boulder_result col-md-4 form-group pt-2 font-weight-bold">{label boulder_result /}</div>
+            <div class="{$classBoulder} boulder_result col-md-8 form-group pb-3">{input boulder_result class => 'form-control'}</div>
+
+            <div class="{$classLead} lead_count col-md-4 form-group pt-2 font-weight-bold">{label lead /}</div>
+            <div class="{$classLead} lead_count col-md-8 form-group pb-3">{input lead class => 'form-control lead_input'}</div>
+            <div class="{$classLead} lead_final col-md-4 form-group pt-2 font-weight-bold">{label lead_final /}</div>
+            <div class="{$classLead} lead_final col-md-8 form-group pb-3">{input lead_final class => 'form-control lead_final_input'}</div>
+            <div class="{$classLead} lead_final_competitors col-md-4 form-group pt-2 font-weight-bold">{label lead_final_competitors /}</div>
+            <div class="{$classLead} lead_final_competitors col-md-8 form-group pb-3">{input lead_final_competitors class => 'form-control'}</div>
+
+
+            <div class="{$classSpeed} speed_count col-md-4 form-group pt-2 font-weight-bold">{label speed /}</div>
+            <div class="{$classSpeed} speed_count col-md-8 form-group pb-3">{input speed class => 'form-control speed_input'}</div>
+            <div class="{$classSpeed} speed_final col-md-4 form-group pt-2 font-weight-bold">{label speed_final /}</div>
+            <div class="{$classSpeed} speed_final col-md-8 form-group pb-3">{input speed_final class => 'form-control speed_final_input'}</div>
+
+            <div class="col-md-4 form-group pt-2 font-weight-bold">{label propo /}</div>
+            <div class="col-md-8 form-group pb-3 ">{input propo accept => 'application/pdf'}</div>
+
+
+            <div class="col-md-12 pb-3 ">
+              {input submit class=>"btn btn-primary btn-block col-md-12"}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{/form}
+
+<script>
+    $(document).ready(function () {
+        $('input[name="isBoulder"]').on("change", function () {
+          if (this.checked) {
+              $(".boulder_count").show("slow");
+              $(".boulder_final").show("slow");
+              $(".boulder_result").show("slow");
+          } else {
+              $(".boulder_count").hide("slow");
+              $(".boulder_final").hide("slow");
+              $(".boulder_result").hide("slow");
+              $(".boulder_input").val('');
+          }
+        });
+
+        $(".boulder_final_input").on("change", function () {
+            if (this.value == 1) {
+                $(".boulder_final_competitors").show("slow");
+                $(".boulder_final_boulders").show("slow");
+            } else {
+                $(".boulder_final_competitors").hide("slow");
+                $(".boulder_final_boulders").hide("slow");
+            }
+        });
+
+        $('input[name="isSpeed"]').on("change", function () {
+            if (this.checked) {
+                $(".speed_count").show("slow");
+                $(".speed_final").show("slow");
+            } else {
+                $(".speed_count").hide("slow");
+                $(".speed_final").hide("slow");
+                $(".speed_input").val('');
+
+            }
+        });
+
+        $('input[name="isLead"]').on("change", function () {
+            if (this.checked) {
+                $(".lead_count").show("slow");
+                $(".lead_final").show("slow");
+            } else {
+                $(".lead_count").hide("slow");
+                $(".lead_final").hide("slow");
+                $(".lead_input").val('');
+            }
+        });
+
+
+        $(".lead_final_input").on("change", function () {
+            if (this.value == 1) {
+                $(".lead_final_competitors").show("slow");
+            } else {
+                $(".lead_final_competitors").hide("slow");
+            }
+        });
+    });
+
+</script>
